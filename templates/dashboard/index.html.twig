@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order - FulTechs{% endblock %}
+
+{% block body%}
+    <div class="slim-mainpanel">
+      <div class="container">
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="#">Home</a></li>
+          </ol>
+          <h6 class="slim-pagetitle">Welcome {{ app.user.ceFirstName }}</h6>
+        </div><!-- slim-pageheader -->
+        {% include 'flash.html.twig' %}
+        
+        <div class="row row-xs">
+          <div class="col-sm-6 col-lg-3">
+            <div class="card card-status">
+              <a href="{{path('ceorders_new')}}" class="">
+                <div class="media">
+                  <i class="icon ion-ios-cart-outline tx-purple"></i>
+                  <div class="media-body">
+                    <h1>{{orderCount}}</h1>
+                    <p>Nouveau Mandats</p>
+                  </div><!-- media-body -->
+                </div><!-- media -->
+              </a>
+            </div><!-- card -->
+          </div><!-- col-3 -->
+          <div class="col-sm-6 col-lg-3 mg-t-10 mg-sm-t-0">
+            <div class="card card-status">
+              <a href="{{path('ceorder_new')}}">
+               <div class="media">
+                  <i class="icon ion-ios-copy-outline tx-primary"></i>
+                  <div class="media-body">
+                    <h1>Mandat +</h1>
+                    <p>Cree Nouveau Mandat</p>
+                  </div><!-- media-body -->
+                </div><!-- media -->
+               </a>
+            </div><!-- card -->
+          </div><!-- col-3 -->
+          <div class="col-sm-6 col-lg-3 mg-t-10 mg-lg-t-0">
+            <div class="card card-status">
+              <div class="media">
+                <i class="icon ion-ios-analytics-outline tx-pink"></i>
+                <div class="media-body">
+                  <h1>{{balance  | number_format(0, '.', ',')}}</h1>
+                  <p>Solde Globale</p>
+                </div><!-- media-body -->
+              </div><!-- media -->
+            </div><!-- card -->
+          </div><!-- col-3 -->
+          <div class="col-sm-6 col-lg-3 mg-t-10 mg-lg-t-0">
+            <div class="card card-status">
+              <div class="media">
+                <i class="icon ion-ios-analytics-outline tx-pink"></i>
+                <div class="media-body">
+                  <h1>2,942</h1>
+                  <p>Total analytics</p>
+                </div><!-- media-body -->
+              </div><!-- media -->
+            </div><!-- card -->
+          </div><!-- col-3 -->
+        </div>
+
+        <div class="row row-xs mg-t-10">
+          <div class="col-lg-8 col-xl-9">
+            <div class="row row-xs">
+              <div class="col-md-5 col-lg-6 col-xl-5">
+
+                <div class="card">
+                  <div class="card-body">
+                    <h6 class="slim-card-title mg-b-20 tx-purple">Solde des Comptes</h6>
+                    {% for key, account in accounts %}
+
+                      <a href="{{path('ceaccount_show',{'id':account.id})}}">
+                        <label class="mg-b-5 tx-gray-600">{{ account.ceAccountBalance | number_format(0,'.',',')}} Compte - {{ account.ceAccountCode}}</label>
+                        <div class="progress mg-b-15">
+                              <div class="progress-bar bg-{{colors[account.ceAccountCode]}} progress-bar-xs" style="width: {{colors[account.ceAccountNumber]}}%" role="progressbar" aria-valuenow="{{colors[account.ceAccountNumber]}}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div><!-- progress -->
+                     </a>
+                      {% endfor %}
+                  </div><!-- card-body -->
+                </div>
+              </div><!-- col-5 -->
+              <div class="col-md-7 col-lg-6 col-xl-7 mg-t-10 mg-md-t-0">
+                <div class="card">
+                  <div class="card-body card-sales">
+                    <h6 class="slim-card-title mg-b-20 tx-success">Disponibilite Compte</h6>
+                    <ul class="nav nav-tabs" role="tablist">
+                      {% for key, acu in acUsage %}
+                        <li class="nav-item">
+                        <a class="nav-link {% if key == 0%}active show{%endif%}" href="#{{acu.accountCode}}" role="tab" data-toggle="tab">{{acu.accountCode}}</a>
+                      </li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content mg-t-10">
+                        {% for key, acu in acUsage %}
+                      <div role="tabpanel" class="tab-pane fade in  {% if key == 0%}active show{%endif%}" id="{{acu.accountCode}}">
+                        <div class="row">
+                          <div class="col">
+                            <label class="tx-12">Today</label>
+                            <p>{{acu.sumToday | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                          <div class="col">
+                            <label class="tx-12">This Week</label>
+                            <p>{{acu.sumWeek | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                          <div class="col">
+                            <label class="tx-12">This Month</label>
+                            <p>{{acu.sumMonth | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                        </div>
+                        <div class="progress mg-b-5">
+                          {% set percentage = acu.sumMonth|abs / 50000 %}
+                          <div class="progress-bar bg-primary wd-50p" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{(percentage|round(1, 'floor'))}}% "> {{(percentage|round(1, 'floor'))}}%</div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div><!-- card body -->
+                </div>
+              </div><!-- col-7 -->
+            </div><!-- row -->
+          </div><!-- col-9 -->
+          <div class="col-lg-4 col-xl-3 mg-t-10 mg-lg-t-0">
+            <div class="card card-people-list pd-20">
+              <div class="slim-card-title">People you may know</div>
+              <div class="media-list">
+                <div class="media">
+                  <img src="http://via.placeholder.com/500x500" alt="">
+                  <div class="media-body">
+                    <a href="">Amber Heard</a>
+                    <p class="tx-12">Software Engineer</p>
+                  </div><!-- media-body -->
+                  <a href=""><i class="icon ion-person-add tx-20"></i></a>
+                </div><!-- media -->
+                <div class="media">
+                  <img src="http://via.placeholder.com/500x500" alt="">
+                  <div class="media-body">
+                    <a href="">Richard Salomon</a>
+                    <p class="tx-12">Architect</p>
+                  </div><!-- media-body -->
+                  <a href=""><i class="icon ion-person-add tx-20"></i></a>
+                </div><!-- media -->
+                <div class="media">
+                  <img src="http://via.placeholder.com/500x500" alt="">
+                  <div class="media-body">
+                    <a href="">Charlene Plateros</a>
+                    <p class="tx-12">Sales Representative</p>
+                  </div><!-- media-body -->
+                  <a href=""><i class="icon ion-person-add tx-20"></i></a>
+                </div><!-- media -->
+              </div><!-- media-list -->
+            </div><!-- card -->
+          </div><!-- col-3 -->
+        </div>
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel --> 
+
+{% endblock %}

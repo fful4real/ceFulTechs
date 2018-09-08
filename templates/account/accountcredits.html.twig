@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{path('ceaccount_list')}}">Comptes</a></li>
+            <li class="breadcrumb-item"><a href="{{path('ceaccount_show',{'id':account.id})}}">Compte</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Receptions</li>
+          </ol>
+          <h6 class="slim-pagetitle">Entrer Compte {{account.ceAccountCode}}</h6>
+        </div><!-- slim-pageheader -->
+        <div class="section-wrapper">
+          {% include 'flash.html.twig' %}
+          <div class="row">
+            <div class="col-md-6 col-lg-12 mg-md-t-0-force">
+              <ul class="list-group list-group-striped">
+              	<label class="section-title">List des entree</label>
+              {% for accountEntry in accountEntries %}
+              	{% if accountEntry.isDebit == 0%}
+                <li class="list-group-item">
+                  <p class="mg-b-0">
+                  <i class="fa fa-arrow-circle-down tx-primary mg-r-8"></i><strong class="tx-inverse tx-medium">{{accountEntry.ceAmount | number_format('0','.',',')}} FCFA</strong> 
+                  <span class="text-muted">Recu le {{accountEntry.datec | date('d-M-Y')}}
+                  {% if accountEntry.ceFromAccount %} du Compte {{accountEntry.ceFromAccount.ceAccountCode}}
+                  {% endif %}
+
+                  {% if accountEntry.fkCeCustomer %} du Client <strong class="tx-inverse tx-medium">{{accountEntry.fkCeCustomer.mobNum}} {{accountEntry.fkCeCustomer.firstName}}</strong> 
+                  {% endif %}
+                  </span>
+                  </p>
+                </li>
+                {% endif %}
+              {% endfor %}
+              </ul>
+            </div><!-- col-4 -->
+          </div><!-- row -->
+
+        </div>
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

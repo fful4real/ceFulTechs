@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{path('ceaccount_list')}}">Comptes</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Depot</li>
+          </ol>
+          <h6 class="slim-pagetitle">Depot Compte - {{account.ceAccountCode}}</h6>
+        </div><!-- slim-pageheader -->
+
+	        <div class="section-wrapper">
+	        {% include 'flash.html.twig' %}
+			{{ form_start(depositForm)}}
+		        <div class="form-layout">
+		            <div class="row mg-b-25">
+		              <div class="col-lg-6">
+		                <div class="form-group">
+		                  <label class="form-control-label">Compte: </label>
+		                  	{{form_widget(depositForm.Compte)}}
+		                  	{{form_errors(depositForm.Compte)}}
+		                </div>
+
+		              </div><!-- col-4 -->
+		              <div class="col-lg-6">
+		                <div class="form-group">
+		                  <label class="form-control-label">Montant :<span class="tx-danger">*</span></label>
+		                  {{form_widget(depositForm.Montant)}}
+		                  	{{form_errors(depositForm.Compte)}}
+		                </div>
+		              </div><!-- col-4 -->
+
+		            </div><!-- row -->
+
+		            <div class="form-layout-footer">
+		              <button type="submit" class="btn btn-success bd-0">Recevoir</button>
+		              <button type="reset" class="btn btn-warning bd-0">Reset</button>
+		              <a href="{{path('ceaccount_show',{'id':account.id})}}" class="btn btn-secondary bd-0">Annuller</a>
+		            </div><!-- form-layout-footer -->
+		        </div><!-- form-layout -->
+{{ form_end(depositForm)}}
+	        </div> <!-- Sectino Wrapper -->
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

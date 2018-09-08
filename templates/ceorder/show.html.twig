@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order - FulTechs{% endblock %}
+
+{% block body%}
+    <div class="slim-mainpanel">
+      <div class="container">
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Mandat</li>
+          </ol>
+          <h6 class="slim-pagetitle">Mandat</h6>
+        </div><!-- slim-pageheader -->
+
+        <div class="card card-body pd-25">
+        {% include 'flash.html.twig' %}
+        
+            <h6 class="slim-card-title mg-b-20">Reference: {{order.ceOrderref}}  <span class="mg-l-10 float-right">{{data.orderStyle.text}}</span><span class="square-10 bg-{{data.orderStyle.color}} rounded-circle tx-right float-right"></span></h6>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-info rounded-circle"></span>
+              <span class="mg-l-10">Type:</span>
+              <span class="mg-l-auto tx-lato tx-right">{{data.orderType}}</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-info rounded-circle"></span>
+              <span class="mg-l-10">Numero:</span>
+              <span class="mg-l-auto tx-lato tx-right"><strong>{{order.ceMobnum}} {{data.network}}</strong></span>
+            </div>
+            <div class="d-flex align-items-center">
+              <span class="square-10 bg-gray-600 rounded-circle"></span>
+              <span class="mg-l-10">Montant:</span>
+              <span class="mg-l-auto tx-lato tx-right">{{order.ceAmount | number_format(0, '.', ',')}} CFA</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-gray-600 rounded-circle"></span>
+              <span class="mg-l-10">Frais:</span>
+              <span class="mg-l-auto tx-lato tx-right">{{order.ceOrderCharge | number_format(0, '.', ',')}} FCFA</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-pink rounded-circle"></span>
+              <span class="mg-l-10">Total:</span>
+              <span class="mg-l-auto tx-lato tx-right"><strong>{{order.ceOrderTotal | number_format(0, '.', ',')}} FCFA</strong></span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-gray-600 rounded-circle"></span>
+              <span class="mg-l-10">Date Creation:</span>
+              <span class="mg-l-auto tx-lato tx-right">{{order.ceDatec | date('d/m/Y')}}</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-gray-600 rounded-circle"></span>
+              <span class="mg-l-10">Cree Par:</span>
+              <span class="mg-l-auto tx-lato tx-right">{{ order.ceCreatedBy.ceFirstName }}<span class="icon icon-user"></span></span>
+            </div>
+            {% if order.ceDoneBy %}
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-gray-600 rounded-circle"></span>
+              <span class="mg-l-10">Gerer Par:</span>
+              <span class="mg-l-auto tx-lato tx-right"><span class="icon icon-user">{{order.ceDoneBy.ceFirstName}}</span></span>
+            </div>
+            {% endif %}
+            <p>
+
+            {% if (orderStatus.New and changeStatus) %}
+            <div class="btn-wrapper">
+                <a href="{{path('ceorder_complete',{'id':order.id})}}" class="btn btn-success btn-block" data-toggle="modal" data-target="#modaldemo5">Gerer</a>
+            </div><!-- btn-wrapper --></p>
+            {% endif %}
+            <div class="btn-wrapper">
+            {% if (changeStatus) %}
+                <a href="{{path('ceorder_edit',{'id':order.id})}}" class="btn btn-warning">Modifier</a>
+            {% endif %}
+                <a href="" class="btn btn-danger mg-l-auto" data-toggle="modal" data-target="#modaldemo2">Supprimer</a>
+            {% if (orderStatus.New) %}
+                <a href="{{path('ceorder_abandon',{'id':order.id})}}" data-toggle="modal" data-target="#modaldemo3" class="btn btn-secondary mg-l-auto">Abandon</a>
+            {% endif %}
+            {% if (orderStatus.Abandoned) %}
+            <a href="{{path('ceorder_reopen',{'id':order.id})}}" data-toggle="modal" data-target="#modaldemo4" class="btn btn-primary mg-l-auto">Reopen</a>
+            {% endif %}
+            </div><!-- btn-wrapper --></p>
+            
+        </div><!-- card -->
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+    <!-- SMALL MODAL -->
+    <div id="modaldemo2" class="modal fade">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0 tx-14">
+          <div class="modal-header pd-x-20">
+            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Notice</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body pd-20">
+            <p class="mg-b-5">Are you sure you want to delete this order ?</p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <a href="{{path('ceorder_delete',{'id':order.id})}}" class="btn btn-danger mg-l-auto">Supprimer</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
+    <!-- SMALL MODAL -->
+    <div id="modaldemo3" class="modal fade">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0 tx-14">
+          <div class="modal-header pd-x-20">
+            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Notice</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body pd-20">
+            <p class="mg-b-5">Are you sure you want to Abandon this order ?</p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <a href="{{path('ceorder_abandon',{'id':order.id})}}" class="btn btn-danger mg-l-auto">Abandon</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
+    <!-- SMALL MODAL -->
+    <div id="modaldemo4" class="modal fade">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0 tx-14">
+          <div class="modal-header pd-x-20">
+            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Notice</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body pd-20">
+            <p class="mg-b-5">Are you sure you want to reopen this order ?</p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <a href="{{path('ceorder_reopen',{'id':order.id})}}" class="btn btn-success mg-l-auto">Reopen</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
+    <!-- SMALL MODAL -->
+    <div id="modaldemo5" class="modal fade">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bd-0 tx-14">
+          <div class="modal-header pd-x-20">
+            <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold">Compte</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body pd-20">
+    {{ form_start(accountForm) }}
+      {{form_widget(accountForm.Account)}}
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="submit" class="btn btn-success mg-l-auto">Complete</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+    {{ form_end(accountForm)}}
+        </div>
+      </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
+{% endblock %}

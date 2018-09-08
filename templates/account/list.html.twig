@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Accounts</li>
+          </ol>
+          <h6 class="slim-pagetitle">Liste Compte</h6>
+        </div><!-- slim-pageheader -->
+
+		<div class="row row-xs">
+    {% include 'flash.html.twig' %}
+	{% for key, account in accounts %}
+
+          <div class="col-sm-6 col-lg-3 mg-b-10">
+            <div class="card card-status">
+            <a href="{{path('ceaccount_show',{'id':account.id})}}" class="">
+              <div class="media">
+                <i class="icon ion-ios-bookmarks-outline tx-purple"></i>
+                <div class="media-body">
+                  <h1>{{account.ceAccountBalance | number_format(0, '.', ',')}}</h1>
+                  <p>{{account.ceAccountCode}}  : {{account.ceAccountName}}<br>{{account.ceAccountNumber}} </p>
+                </div><!-- media-body -->
+              </div><!-- media -->
+            </a>
+            </div><!-- card -->
+          </div><!-- col-3 -->
+	{% endfor %}
+        </div>
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

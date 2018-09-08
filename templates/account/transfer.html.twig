@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{path('ceaccount_list')}}">Comptes</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Reception</li>
+          </ol>
+          <h6 class="slim-pagetitle">Reception Compte - {{account.ceAccountCode}}</h6>
+        </div><!-- slim-pageheader -->
+
+<form name="account_entry" method="post">
+
+          <div class="section-wrapper">
+{% include 'flash.html.twig' %}
+      
+            <div class="form-layout">
+                <div class="row mg-b-25">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label">De Compte: <span class="tx-danger">*</span></label>
+                        <input type="text" id="account_entry_ceAmount" name="account_entry[ceAmount]" required="required" placeholder="Entrer le montant" class="form-control">
+                      
+                    </div>
+
+                  </div><!-- col-4 -->
+
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-control-label">A Compte: <span class="tx-danger">*</span></label>
+                        <input type="text" id="account_entry_fkCeCustomer_mobNum" name="account_entry[fkCeCustomer][mobNum]" required="required" placeholder="Enter Mobile number" class="form-control">
+                    </div>
+                  </div><!-- col-4 -->
+
+                </div><!-- row -->
+
+                <div class="form-layout-footer">
+                  <button type="submit" class="btn btn-success bd-0">Recevoir</button>
+                  <button type="reset" class="btn btn-warning bd-0">Reset</button>
+                  <a href="/account/1" class="btn btn-secondary bd-0">Annuller</a>
+                </div><!-- form-layout-footer -->
+            </div><!-- form-layout -->
+          </div><!-- section-wrapper -->
+
+<input type="hidden" id="account_entry__token" name="account_entry[_token]" value="lAa2W1LBu_nPLLPeQ3OJSMUpLCC5ftdvLqT3wlHmnNI"></form>
+
+
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

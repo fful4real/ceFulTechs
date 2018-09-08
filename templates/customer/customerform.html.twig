@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Customer-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+          </ol>
+          <h6 class="slim-pagetitle">{% if editMode %}Modifier{% else %}Nouveau{% endif %} Client</h6>
+        </div><!-- slim-pageheader -->
+
+          <div class="card"> 
+          {{ form_start(customerForm)}}
+
+            	<div class="card-body pd-30">
+                  <div class="form-group">
+                  		<label class="form-control-label" for="order_mobnum" name="order_mobnum_lab" id="">Numero de tel</label>
+    	              <div class="input-group">
+    	                <div class="input-group-prepend">
+    	                  <span class="input-group-text fa fa-phone tx-16 lh-0 op-6"></span>
+    	                </div>
+    	                {{ form_widget(customerForm.mobNum) }}
+    	                <div class="input-group-append">
+    	                  <span class="input-group-text">MTN</span>
+    	                </div>
+    	              </div>
+    	              {{ form_errors(customerForm.mobNum)}}
+                  </div><!-- form-group -->
+    
+                  <div class="form-group">
+                    <label class="form-control-label" for="order_surname" name="order_surname" id="">Prenom</label>
+                    {{ form_widget(customerForm.firstName) }}
+                    {{ form_errors(customerForm.firstName)}}
+                  </div><!-- form-group -->
+                  <div class="form-group">
+                    <label class="form-control-label" name="order_nam_e" id="">Nom</label>
+                    {{ form_widget(customerForm.lastName) }}
+                    {{ form_errors(customerForm.lastName)}}
+                  </div><!-- form-group -->
+    
+                  <div class="mg-t-30">
+                  	<input type="submit" name="" value="{% if editMode %}Modifier{% else %}Creer{% endif %}" class="btn btn-success">
+                  	<input type="reset" name="" value="Reinitialiser" class="btn btn-warning">
+                  </div>
+            	</div><!-- card-body -->
+
+        {{ form_end(customerForm) }}
+          </div><!-- card -->
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

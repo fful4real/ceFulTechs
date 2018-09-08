@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">New</li>
+          </ol>
+          <h6 class="slim-pagetitle">{% if editMode %}Modifier{% else %}Nouveau{% endif %} Mandat</h6>
+        </div><!-- slim-pageheader -->
+
+          <div class="card">
+          {% include 'flash.html.twig' %}
+          {{ form_start(orderForm)}}
+
+            	<div class="card-body pd-30">
+                  <div class="form-group">
+                  		<label class="form-control-label" for="ceorder[ceMobnum]" name="ceorder[ceMobnum]_label" id="">Numero de tel</label>
+    	              <div class="input-group">
+    	                <div class="input-group-prepend">
+    	                  <span class="input-group-text fa fa-phone tx-16 lh-0 op-6"></span>
+    	                </div>
+    	                {{ form_widget(orderForm.ceMobnum) }}
+    	                <div class="input-group-append">
+    	                  <span class="input-group-text">{{netCodeDisplay}}</span>
+    	                </div>
+    	              </div>
+    	              {{ form_errors(orderForm.ceMobnum)}}
+                  </div><!-- form-group -->
+    
+                  <div class="form-group">
+                  		<label class="form-control-label" for="ceorder[ceAmount]" name="ceorder[ceAmount]_label" id="">Montant</label>
+    	              <div class="input-group">
+    	                <div class="input-group-prepend">
+    	                  <span class="input-group-text">XAF</span>
+    	                </div>
+    	                {{ form_widget(orderForm.ceAmount) }}
+    	                <div class="input-group-append">
+		    	            <div id="slWrapper2" class="parsley-select">
+				                {{ form_widget(orderForm.orderType) }}
+				            </div>
+    	                </div>
+    	                {{ form_errors(orderForm.ceAmount)}}
+    	              </div>
+                  </div><!-- form-group -->
+    
+                  <div class="form-group">
+                    <label class="form-control-label" for="ceCustomer[firstName]" name="ceCustomer[firstName]_label" id="">Prenom</label>
+                <input type="text" value="{{ceCustomer.firstName}}" name="ceCustomer[firstName]" class="form-control" placeholder="Enter First Name" required="required">
+                  </div><!-- form-group -->
+                  <div class="form-group">
+                    <label class="form-control-label" for="ceCustomer[lastName]" name="ceCustomer[lastName]_label" id="">Nom</label>
+                    <input type="text" value="{{ceCustomer.lastName}}" name="ceCustomer[lastName]" class="form-control" placeholder="Enter Last Name">
+                  </div><!-- form-group -->
+   
+                  <div class="form-group">
+                    <label class="form-control-label" for="order[fkCeTown]" name="order[fkCeTown]_label" id="">Ville</label>
+                    <div id="slWrapper" class="parsley-select wd-250">
+		                {{ form_widget(orderForm.fkCeTown) }}
+		                <div id="slErrorContainer"></div>
+		            </div>
+                  </div><!-- form-group -->
+    
+                  <div class="mg-t-30">
+                  	<input type="submit" name="" value="{% if editMode %}Modifier{% else %}Creer{% endif %}" class="btn btn-success">
+                  	<input type="reset" name="" value="Reinitialiser" class="btn btn-warning">
+                  	<a href="{% if editMode %}{{path('ceorder_show',{'id':orderId})}}{% else %}{{path('ceorder_list')}}{% endif %}" class="btn btn-secondary mg-l-auto">Annuler</a>
+                  </div>
+            	</div><!-- card-body -->
+
+        {{ form_end(orderForm) }}
+          </div><!-- card -->
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

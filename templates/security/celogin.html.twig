@@ -1,0 +1,27 @@
+{% extends 'loginbase.html.twig' %}
+
+{% block title %}Order - FulTechs{% endblock %}
+
+{% block body%}
+
+<div class="signin-wrapper">
+<form method="post" action="{{path('cesecurity_signin')}}">
+      <div class="signin-box">
+        <h2 class="slim-logo"><a href="index.html">FulTechs<span>.</span></a></h2>
+
+        <div class="form-group">
+          <input type="text" id="registration_ceUsername" name="_username" required="required" maxlength="255" placeholder="Enter email" class="form-control">
+          
+        </div><!-- form-group -->
+        <div class="form-group">
+          <input type="password" id="registration_cePassword" name="_password" required="required" placeholder="Enter password" class="form-control">
+          
+        </div><!-- form-group -->
+
+        <button type="submit" class="btn btn-primary btn-block btn-signin">Sign In</button>
+        <p class="mg-b-0">Don't have an account ? <a href="{{path('cesecurity_signup')}}">Sign Up</a></p>
+      </div><!-- signin-box -->
+</form>
+
+</div>
+{% endblock %}

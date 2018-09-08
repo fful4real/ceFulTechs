@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Forms</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Form Layouts</li>
+          </ol>
+          <h6 class="slim-pagetitle">Creer Account Type</h6>
+        </div><!-- slim-pageheader -->
+      
+{{ form_start(accountForm)}}
+        <div class="section-wrapper">
+          <div class="form-layout">
+            <div class="row mg-b-25">
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label">Account Code: <span class="tx-danger">*</span></label>
+                  {{ form_widget(accountForm.ceAccountCode) }}
+                  {{ form_errors(accountForm.ceAccountCode)}}
+                </div>
+              </div><!-- col-4 -->
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label">Account Number: <span class="tx-danger">*</span></label>
+                  {{ form_widget(accountForm.ceAccountNumber) }}
+                  {{ form_errors(accountForm.ceAccountNumber)}}
+                </div>
+              </div><!-- col-4 -->
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label">Account Name: <span class="tx-danger">*</span></label>
+                  {{ form_widget(accountForm.ceAccountName) }}
+                </div>
+              </div><!-- col-4 -->
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label">Account is Active <span class="tx-danger">*</span></label>
+                  {{ form_widget(accountForm.ceAccountActive) }}
+                  {{ form_errors(accountForm.ceAccountActive)}}
+                </div>
+              </div><!-- col-4 -->
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label">Account Type: </label>
+                  {{ form_widget(accountForm.fkCeAccountType) }}
+                  {{ form_errors(accountForm.fkCeAccountType)}}
+                </div>
+              </div><!-- col-6 -->
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label class="form-control-label">Bank: </label>
+                  {{ form_widget(accountForm.ceBank) }}
+                  {{ form_errors(accountForm.ceBank)}}
+                </div>
+              </div><!-- col-6 -->
+            </div><!-- row -->
+
+            <div class="form-layout-footer">
+              <button type="submit" class="btn btn-primary bd-0">Creer</button>
+              <button type="reset" class="btn btn-secondary bd-0">Reset</button>
+              <a href="" class="btn btn-warning bd-0">Modifier</a>
+              <a href="" class="btn btn-danger bd-0">Supprimer</a>
+            </div><!-- form-layout-footer -->
+          </div><!-- form-layout -->
+        </div><!-- section-wrapper -->
+{{ form_end(accountForm)}}
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

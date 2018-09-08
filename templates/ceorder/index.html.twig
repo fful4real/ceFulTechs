@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order - FulTechs{% endblock %}
+
+{% block body%}
+{% block activeNav0 %}<li class="nav-item with-sub active">{% endblock %}
+    <div class="slim-mainpanel">
+      <div class="container">
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Mandat</li>
+          </ol>
+          <h6 class="slim-pagetitle">Mandat</h6>
+        </div><!-- slim-pageheader -->
+
+        <div class="card card-body pd-25">
+            <h6 class="slim-card-title mg-b-20">Reference: RefMandat</h6>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-pink rounded-circle"></span>
+              <span class="mg-l-10">Type:</span>
+              <span class="mg-l-auto tx-lato tx-right">Depot (mandat type)</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-info rounded-circle"></span>
+              <span class="mg-l-10">Numero:</span>
+              <span class="mg-l-auto tx-lato tx-right"><strong>6 79 23 33 61 (resaux)</strong></span>
+            </div>
+            <div class="d-flex align-items-center">
+              <span class="square-10 bg-purple rounded-circle"></span>
+              <span class="mg-l-10">Montant:</span>
+              <span class="mg-l-auto tx-lato tx-right">150,000 CFA</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-pink rounded-circle"></span>
+              <span class="mg-l-10">Frais:</span>
+              <span class="mg-l-auto tx-lato tx-right">1250 FCFA</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-pink rounded-circle"></span>
+              <span class="mg-l-10">Total:</span>
+              <span class="mg-l-auto tx-lato tx-right"><strong>151,250 FCFA</strong></span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-info rounded-circle"></span>
+              <span class="mg-l-10">Date Creation:</span>
+              <span class="mg-l-auto tx-lato tx-right">Dim, 27/jul/2018</span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-info rounded-circle"></span>
+              <span class="mg-l-10">Cree Par:</span>
+              <span class="mg-l-auto tx-lato tx-right">Felix FC<span class="icon icon-user"></span></span>
+            </div>
+            <div class="d-flex align-items-center mg-t-5">
+              <span class="square-10 bg-info rounded-circle"></span>
+              <span class="mg-l-10">Gerer Par:</span>
+              <span class="mg-l-auto tx-lato tx-right">Violaine NC FC<span class="icon icon-user"></span></span>
+            </div>
+            <p>
+            <div class="btn-wrapper">
+                <a href="" class="btn btn-success btn-block">Gerer</a>
+            </div><!-- btn-wrapper --></p>
+            <div class="btn-wrapper">
+                <a href="" class="btn btn-warning">Modifier</a>
+                <a href="" class="btn btn-danger mg-l-auto">Supprimer</a>
+            </div><!-- btn-wrapper --></p>
+            
+        </div><!-- card -->
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Order-FulTechs{% endblock %}
+
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{path('ceaccount_list')}}">Comptes</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Reception</li>
+          </ol>
+          <h6 class="slim-pagetitle">Reception Compte - {{account.ceAccountCode}}</h6>
+        </div><!-- slim-pageheader -->
+
+{{ form_start(accountEntryForm)}}
+
+	        <div class="section-wrapper">
+{% include 'flash.html.twig' %}
+		        <div class="form-layout">
+		            <div class="row mg-b-25">
+		              <div class="col-lg-3">
+		                <div class="form-group">
+		                  <label class="form-control-label">Montant: <span class="tx-danger">*</span></label>
+		                  	{{ form_widget(accountEntryForm.ceAmount) }}
+                 			{{ form_errors(accountEntryForm.ceAmount)}}
+		                </div>
+
+		              </div><!-- col-4 -->
+
+		              <div class="col-lg-3">
+		                <div class="form-group">
+		                  	<label class="form-control-label">Numero Tel: <span class="tx-danger">*</span></label>
+		                  	{{ form_widget(accountEntryForm.fkCeCustomer.mobNum) }}
+                 			{{ form_errors(accountEntryForm.fkCeCustomer.mobNum) }}
+		                  
+		                </div>
+		              </div><!-- col-4 -->
+		              <div class="col-lg-3">
+		                <div class="form-group">
+		                  <label class="form-control-label">Prenom: <span class="tx-danger">*</span></label>
+		                  {{ form_widget(accountEntryForm.fkCeCustomer.firstName) }}
+                 			{{ form_errors(accountEntryForm.fkCeCustomer.firstName) }}
+		                </div>
+		              </div><!-- col-4 -->
+		              <div class="col-lg-3">
+		                <div class="form-group">
+		                  <label class="form-control-label">Nom :</label>
+		                  {{ form_widget(accountEntryForm.fkCeCustomer.lastName) }}
+                 			{{ form_errors(accountEntryForm.fkCeCustomer.lastName) }}
+		                  
+		                </div>
+		              </div><!-- col-4 -->
+
+		            </div><!-- row -->
+
+		            <div class="form-layout-footer">
+		              <button type="submit" class="btn btn-success bd-0">Recevoir</button>
+		              <button type="reset" class="btn btn-warning bd-0">Reset</button>
+		              <a href="{{path('ceaccount_show',{'id':account.id})}}" class="btn btn-secondary bd-0">Annuller</a>
+		            </div><!-- form-layout-footer -->
+		        </div><!-- form-layout -->
+	        </div><!-- section-wrapper -->
+
+{{ form_end(accountEntryForm)}}
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+
+{% endblock %}
