@@ -43,9 +43,16 @@ class CeorderController extends AbstractController
     /**
      * @Route("/orders/list", name="ceorder_list")
      */
-    public function orderList(CeorderRepository $repo, CeCustomerRepository $customerRepo, CeTownRepository $townRepo,CeStatusRepository $statusRepo)
+    public function orderList(CeorderRepository $repo, CeCustomerRepository $customerRepo, CeTownRepository $townRepo,CeStatusRepository $statusRepo, Request $reqt)
     {
-        $orders = $repo->findBy(array(), array('ceDatec' => 'DESC'));
+        $limit = 10;
+        $em = $this->getDoctrine()->getEntityManager();
+        $query = $em->createQueryBuilder();
+        $pages = ceil(count($repo->findBy([]))/$limit);
+
+        $page = intval($reqt->query->get('page')) ?:1;
+        $offset = ($page - 1)  * $limit;
+        $orders = $repo->findBy(array(), array('ceDatec' => 'DESC'),$limit,$offset);
         $customers=$statuss=$towns=$colors=[];
         $colorsRepo = $statusRepo->getStatusColors();
         foreach ($orders as $key => $order) {
@@ -63,16 +70,28 @@ class CeorderController extends AbstractController
             'customers'=>$customers,
             'towns'=>$towns,
             'status'=>$statuss,
-            'colors'=>$colors
+            'colors'=>$colors,
+            'count'=>$pages,
+            'page'=>$page,
         ]);
     }
 
     /**
      * @Route("/orders/new", name="ceorders_new")
      */
-    public function ordersNew(CeorderRepository $repo, CeCustomerRepository $customerRepo, CeTownRepository $townRepo,CeStatusRepository $statusRepo)
+    public function ordersNew(CeorderRepository $repo, CeCustomerRepository $customerRepo, CeTownRepository $townRepo,CeStatusRepository $statusRepo, Request $reqt)
     {
-    	$orders = $repo->getNewOrders();
+
+        $limit = 5;
+        $em = $this->getDoctrine()->getEntityManager();
+        $query = $em->createQueryBuilder();
+        $status = $statusRepo->find(1);
+        $pages = ceil(count($repo->findBy(['ceStatus'=>$status]))/$limit);
+
+        $page = intval($reqt->query->get('page')) ?:1;
+        $offset = ($page - 1)  * $limit;
+        $orders = $repo->getNewOrders($offset,$limit);
+
     	$customers=$statuss=$towns=$colors=[];
     	$colorsRepo = $statusRepo->getStatusColors();
     	foreach ($orders as $key => $order) {
@@ -90,7 +109,9 @@ class CeorderController extends AbstractController
             'customers'=>$customers,
             'towns'=>$towns,
             'status'=>$statuss,
-            'colors'=>$colors
+            'colors'=>$colors,
+            'count'=>$pages,
+            'page'=>$page,
         ]);
     }
 
@@ -180,7 +201,7 @@ class CeorderController extends AbstractController
             $manager->persist($accountEntry);
             $manager->flush();
 
-            $this->addFlash('success', 'Gerer avec success: '.$order->getCeOrderTotal());
+            $this->addFlash('success', 'Gerer avec success: '.number_format($order->getCeOrderTotal()));
             return $this->redirectToRoute('ceorder_show',['id'=>$order->getId()]);
         }
 

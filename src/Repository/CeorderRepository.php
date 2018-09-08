@@ -78,15 +78,21 @@ class CeorderRepository extends ServiceEntityRepository
     }
 
     
-    public function getNewOrders()
+    public function getNewOrders($offset = null, $limit = null)
     {
 
-        return $this->createQueryBuilder('o')
+        $query = $this->createQueryBuilder('o')
             ->where('o.ceStatus = :statusCode')
             ->setParameter('statusCode', 1)
-            ->orderBy('o.ceDatec', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('o.ceDatec', 'DESC');
+        if (false === is_null($offset))
+            $query->setFirstResult($offset);
+
+        if (false === is_null($limit))
+            $query->setMaxResults($limit);
+
+        return $query->getQuery()
+        ->getResult();
     }
 
     
