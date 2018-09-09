@@ -107,4 +107,45 @@ class CeorderRepository extends ServiceEntityRepository
 
         return count($newOrders);
     }
+
+    
+    public function getPagination($page=1, $limit=10, $options=[])
+    {
+        $pages = ceil(count($this->findBy($options))/$limit);
+        $page = $page > $pages ? 1 : $page;
+        $var = ceil($page/5);
+        $startPage = $var > 1 ? (($var-1)*5)+1 : $var;
+        $pagination = '';
+        for ($i=$startPage, $j=0; $i <= $pages; $i++, $j++) {
+            if ($j==5)
+                break;
+            $pagination.='<li class="page-item ';
+            if ($i == $page)
+                $pagination.='active';
+            $pagination .= '"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+        }
+        if ($page > 1) {
+            $k = $page-1;
+            $pagination = '
+            <li class="page-item hidden-xs-down">
+                <a class="page-link" href="?page=1" aria-label="First"><i class="fa fa-angle-double-left"></i></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page='.$k.'" aria-label="Previous"><i class="fa fa-angle-left"></i></a>
+            </li>
+            '.$pagination;
+        }
+        if ($page < $pages) {
+            $k = $page+1;
+            $pagination.='
+          <li class="page-item">
+            <a class="page-link" href="?page='.$k.'" aria-label="Previous"><i class="fa fa-angle-right"></i></a>
+          </li>
+          <li class="page-item hidden-xs-down">
+            <a class="page-link" href="#" aria-label="First"><i class="fa fa-angle-double-right"></i></a>
+          </li>';
+        }
+
+        return $pagination;
+    }
 }

@@ -51,6 +51,7 @@ class CeorderController extends AbstractController
         $pages = ceil(count($repo->findBy([]))/$limit);
 
         $page = intval($reqt->query->get('page')) ?:1;
+        $pagination = $repo->getPagination($page,$limit);
         $offset = ($page - 1)  * $limit;
         $orders = $repo->findBy(array(), array('ceDatec' => 'DESC'),$limit,$offset);
         $customers=$statuss=$towns=$colors=[];
@@ -71,7 +72,7 @@ class CeorderController extends AbstractController
             'towns'=>$towns,
             'status'=>$statuss,
             'colors'=>$colors,
-            'count'=>$pages,
+            'pagination'=>$pagination,
             'page'=>$page,
         ]);
     }
@@ -86,9 +87,11 @@ class CeorderController extends AbstractController
         $em = $this->getDoctrine()->getEntityManager();
         $query = $em->createQueryBuilder();
         $status = $statusRepo->find(1);
+        $options = ['ceStatus'=>$statusRepo->find(1)];
         $pages = ceil(count($repo->findBy(['ceStatus'=>$status]))/$limit);
 
         $page = intval($reqt->query->get('page')) ?:1;
+        $pagination = $repo->getPagination($page,$limit,$options);
         $offset = ($page - 1)  * $limit;
         $orders = $repo->getNewOrders($offset,$limit);
 
@@ -110,7 +113,7 @@ class CeorderController extends AbstractController
             'towns'=>$towns,
             'status'=>$statuss,
             'colors'=>$colors,
-            'count'=>$pages,
+            'pagination'=>$pagination,
             'page'=>$page,
         ]);
     }
@@ -201,7 +204,8 @@ class CeorderController extends AbstractController
             $manager->persist($accountEntry);
             $manager->flush();
 
-            $this->addFlash('success', 'Gerer avec success: '.number_format($order->getCeOrderTotal()));
+            $this->addFlash('success', 'Gerer avec success: '.number_format($order->getCeOrderTotal()))
+            ;
             return $this->redirectToRoute('ceorder_show',['id'=>$order->getId()]);
         }
 

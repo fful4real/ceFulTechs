@@ -51,14 +51,7 @@
             <div class="pagination-wrapper border-left-0 border-right-0 border-bottom-0">
               <nav aria-label="Page navigation">
                 <ul class="pagination mg-b-0">
-                  {% for i in 1..count%}
-                  <li class="page-item {% if i==page%}active{%endif%}"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-                  {% endfor %}
-                  <li class="page-item">
-                    <a class="page-link bg-success text-white" href="#" aria-label="Next">
-                      All
-                    </a>
-                  </li>
+                  {{pagination|raw}}
                 </ul>
               </nav>
             </div>
