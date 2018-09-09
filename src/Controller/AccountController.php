@@ -162,7 +162,7 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('ceaccount_list');
         }
         if(!$account->getCeAccountActive()){
-            //$this->addFlash('warning', 'Account is inactive');
+            $this->addFlash('warning', 'Account is inactive');
             return $this->redirectToRoute('ceaccount_list');
         }
 
