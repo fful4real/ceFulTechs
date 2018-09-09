@@ -142,7 +142,7 @@ class CeorderRepository extends ServiceEntityRepository
             <a class="page-link" href="?page='.$k.'" aria-label="Previous"><i class="fa fa-angle-right"></i></a>
           </li>
           <li class="page-item hidden-xs-down">
-            <a class="page-link" href="#" aria-label="First"><i class="fa fa-angle-double-right"></i></a>
+            <a class="page-link" href="?page='.$pages.'" aria-label="First"><i class="fa fa-angle-double-right"></i></a>
           </li>';
         }
 

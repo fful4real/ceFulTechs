@@ -60,7 +60,7 @@ class AccountController extends AbstractController
             $this->addFlash('warning', 'Account doesn\'t exiist');
             return $this->redirectToRoute('ceaccount_list');
         }
-        $accountEntries = $account->getFkCeAccountEntries();
+        $accountEntries = $account->getFkCeAccountEntries(['id'=>'ASC']);
 
         if (count($accountEntries)<1) {
             $this->addFlash('warning', 'No Entries');
@@ -147,7 +147,7 @@ class AccountController extends AbstractController
         }
 
         return $this->render('account/accountform.html.twig', [
-            'controller_name' => 'AccountController', 'accountForm'=>$accountForm->createView()
+            'controller_name' => 'AccountController', 'accountForm'=>$accountForm->createView(),
         ]);
     }
 

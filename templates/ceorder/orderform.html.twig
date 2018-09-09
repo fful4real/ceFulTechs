@@ -8,8 +8,8 @@
 
         <div class="slim-pageheader">
           <ol class="breadcrumb slim-breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">New</li>
+            <li class="breadcrumb-item"><a href="{{path('dashboard')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% if editMode %}Order Edit{% else %}Order New{% endif %}</li>
           </ol>
           <h6 class="slim-pagetitle">{% if editMode %}Modifier{% else %}Nouveau{% endif %} Mandat</h6>
         </div><!-- slim-pageheader -->
