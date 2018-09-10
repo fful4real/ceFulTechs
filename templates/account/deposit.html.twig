@@ -20,7 +20,7 @@
 			{{ form_start(depositForm)}}
 		        <div class="form-layout">
 		            <div class="row mg-b-25">
-		              <div class="col-lg-6">
+		              <div class="col-lg-4">
 		                <div class="form-group">
 		                  <label class="form-control-label">Compte: </label>
 		                  	{{form_widget(depositForm.Compte)}}
@@ -28,11 +28,18 @@
 		                </div>
 
 		              </div><!-- col-4 -->
-		              <div class="col-lg-6">
+		              <div class="col-lg-4">
 		                <div class="form-group">
 		                  <label class="form-control-label">Montant :<span class="tx-danger">*</span></label>
 		                  {{form_widget(depositForm.Montant)}}
 		                  	{{form_errors(depositForm.Compte)}}
+		                </div>
+		              </div><!-- col-4 -->
+		              <div class="col-lg-4">
+		                <div class="form-group">
+		                  <label class="form-control-label">Note :</label>
+		                  {{form_widget(depositForm.Note)}}
+		                  	{{form_errors(depositForm.Note)}}
 		                </div>
 		              </div><!-- col-4 -->
 

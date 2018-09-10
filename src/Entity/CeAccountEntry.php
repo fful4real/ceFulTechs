@@ -67,6 +67,11 @@ class CeAccountEntry
      */
     private $ceCreatedBy;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ceNote;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -176,6 +181,18 @@ class CeAccountEntry
     public function setCeCreatedBy(?CeUser $ceCreatedBy): self
     {
         $this->ceCreatedBy = $ceCreatedBy;
+
+        return $this;
+    }
+
+    public function getCeNote(): ?string
+    {
+        return $this->ceNote;
+    }
+
+    public function setCeNote(?string $ceNote): self
+    {
+        $this->ceNote = $ceNote;
 
         return $this;
     }

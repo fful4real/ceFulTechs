@@ -2,30 +2,29 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
 use App\Entity\CeAccount;
-use App\Entity\CeBank;
 use App\Entity\CeAccountEntry;
+use App\Entity\CeBank;
 use App\Entity\CeCustomer;
-use App\Repository\CeBankRepository;
-use App\Repository\CeAccountTypeRepository;
+use App\Form\AccountEntryCustomerType;
+use App\Form\AccountEntryType;
+use App\Form\AccountType;
 use App\Repository\CeAccountEntryRepository;
 use App\Repository\CeAccountRepository;
+use App\Repository\CeAccountTypeRepository;
+use App\Repository\CeBankRepository;
+use App\Repository\CeChargeRepository;
 use App\Repository\CeCustomerRepository;
 use App\Repository\CeNetworkRepository;
-use App\Repository\CeChargeRepository;
-use App\Form\AccountType;
-use App\Form\AccountEntryType;
-use App\Form\AccountEntryCustomerType;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class AccountController extends AbstractController
 {
@@ -258,6 +257,7 @@ class AccountController extends AbstractController
                     ->setMethod('POST')
                     ->add('Compte', TextType::class,['attr'=>['placeholder'=>$accountAlias, 'readonly'=>'']])
                     ->add('Montant', TextType::class,['attr'=>['placeholder'=>'Entrer montant', 'required'=>'required']])
+                    ->add('Note', TextType::class,['required'=>'false', 'attr'=>['placeholder'=>'Note', 'required'=>'required']])
                     ->getForm();
         $depositForm->handleRequest($reqt);
         if ($depositForm->isSubmitted()&& $depositForm->isValid()) {
@@ -269,13 +269,14 @@ class AccountController extends AbstractController
             $accountEntry->setFkCeAccount($account)
                          ->setCeAmount(intval($postData['Montant']))
                          ->setIsDebit(0)
+                         ->setCeNote($postData['Note'])
                          ->setDatec(new \DateTime())
                          ->setTms(new \DateTime())
                          ->setCeCreatedBy($this->getUser());
             $manager->persist($accountEntry);
             
             $manager->flush();
-            $this->addFlash('success', 'Montant Recu: '.$postData['Montant'].' FCFA');
+            $this->addFlash('success', 'Montant Recu: '.number_format($postData['Montant'].' FCFA'));
             return $this->redirectToRoute('ceaccount_show',['id'=>$account->getId()]);
         }
 
