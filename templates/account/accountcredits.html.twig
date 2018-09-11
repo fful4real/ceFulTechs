@@ -32,6 +32,9 @@
 
                   {% if accountEntry.fkCeCustomer %} du Client <strong class="tx-inverse tx-medium">{{accountEntry.fkCeCustomer.mobNum}} {{accountEntry.fkCeCustomer.firstName}}</strong> 
                   {% endif %}
+                  {% if accountEntry.ceNote %} 
+                    <strong class="tx-inverse tx-medium">{{accountEntry.ceNote}}</strong> 
+                  {% endif %}
                   </span>
                   </p>
                 </li>
@@ -40,6 +43,14 @@
               </ul>
             </div><!-- col-4 -->
           </div><!-- row -->
+        
+        <div class="pagination-wrapper border-0">
+          <nav aria-label="Page navigation">
+            <ul class="pagination mg-b-0">
+              {{pagination|raw}}
+            </ul>
+          </nav>
+        </div>
 
         </div>
 

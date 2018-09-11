@@ -16,6 +16,7 @@ use App\Repository\CeBankRepository;
 use App\Repository\CeChargeRepository;
 use App\Repository\CeCustomerRepository;
 use App\Repository\CeNetworkRepository;
+use App\Repository\CeorderRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -53,13 +54,18 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/{id}/credits", name="ceaccount_credits")
      */
-    public function accountCredits(CeAccount $account = null)
+    public function accountCredits(CeAccount $account = null, CeorderRepository $orderRepo, Request $reqt, CeAccountEntryRepository $acEntryRepo)
     {
         if (!$account) {
             $this->addFlash('warning', 'Account doesn\'t exiist');
             return $this->redirectToRoute('ceaccount_list');
         }
-        $accountEntries = $account->getFkCeAccountEntries(['id'=>'ASC']);
+
+        $limit = 10;
+        $page = intval($reqt->query->get('page')) ?:1;
+        $pagination = $orderRepo->getPagination($page, $limit=10, $options=['fkCeAccount'=>$account, 'isDebit'=>0],$class='CeAccountEntry');
+        $offset = ($page - 1)  * $limit;
+        $accountEntries = $acEntryRepo->findBy(['fkCeAccount'=>$account, 'isDebit'=>0], array('datec' => 'DESC'),$limit,$offset);
 
         if (count($accountEntries)<1) {
             $this->addFlash('warning', 'No Entries');
@@ -68,19 +74,28 @@ class AccountController extends AbstractController
         return $this->render('account/accountcredits.html.twig', [
             'account'=>$account,
             'accountEntries'=>$accountEntries,
+            'pagination'=>$pagination,
         ]);
     }
 
     /**
      * @Route("/account/{id}/debits", name="ceaccount_debits")
      */
-    public function accountDebits(CeAccount $account = null)
+    public function accountDebits(CeAccount $account = null, CeorderRepository $orderRepo, CeAccountEntryRepository $acEntryRepo, Request $reqt)
     {
         if (!$account) {
             $this->addFlash('warning', 'Account doesn\'t exiist');
             return $this->redirectToRoute('ceaccount_list');
         }
-        $accountEntries = $account->getFkCeAccountEntries();
+
+
+        $limit = 10;
+        $page = intval($reqt->query->get('page')) ?:1;
+        $pagination = $orderRepo->getPagination($page, $limit=10, $options=['fkCeAccount'=>$account, 'isDebit'=>0],$class='CeAccountEntry');
+        $offset = ($page - 1)  * $limit;
+        $accountEntries = $acEntryRepo->findBy(['fkCeAccount'=>$account, 'isDebit'=>1], array('datec' => 'DESC'),$limit,$offset);
+
+        // $accountEntries = $account->getFkCeAccountEntries();
 
         if (count($accountEntries)<1) {
             $this->addFlash('warning', 'No Debits');
@@ -89,6 +104,7 @@ class AccountController extends AbstractController
         return $this->render('account/accountdebits.html.twig', [
             'account'=>$account,
             'accountEntries'=>$accountEntries,
+            'pagination'=>$pagination,
         ]);
     }
 
@@ -116,17 +132,25 @@ class AccountController extends AbstractController
             $bankMatch=$validForm=true;
 
             if ($postData['fkCeAccountType'] <= 2) {
-                $account->setIsCommercial(1);
-                $account->setIsMobileMoney(0);
-                $account->setIsBankAccount(0);
+                $account->setIsCommercial(1)
+                        ->setIsMobileMoney(0)
+                        ->setIsBankAccount(0)
+                        ->setIsCash(0);
             } elseif($postData['fkCeAccountType'] > 2 && $postData['fkCeAccountType'] <=4) {
-                $account->setIsMobileMoney(1);
-                $account->setIsCommercial(0);
-                $account->setIsBankAccount(0);
+                $account->setIsCommercial(0)
+                        ->setIsMobileMoney(1)
+                        ->setIsBankAccount(0)
+                        ->setIsCash(0);
+            }elseif($postData['fkCeAccountType'] == 2){
+                $account->setIsCommercial(0)
+                        ->setIsMobileMoney(0)
+                        ->setIsBankAccount(1)
+                        ->setIsCash(0);
             }else{
-                $account->setIsMobileMoney(0);
-                $account->setIsCommercial(0);
-                $account->setIsBankAccount(1);
+                $account->setIsCommercial(0)
+                        ->setIsMobileMoney(0)
+                        ->setIsBankAccount(0)
+                        ->setIsCash(1);
             }
             
         }
@@ -167,9 +191,7 @@ class AccountController extends AbstractController
 
 
         $accountEntry = new CeAccountEntry();
-        //var_dump($reqt->request->get('account'));
-
-        //die();
+        
         $accountEntryForm = $this->createForm(AccountEntryType::class, $accountEntry);
 
         $accountEntryForm->handleRequest($reqt);
@@ -199,7 +221,7 @@ class AccountController extends AbstractController
 
             $manager->flush();
 
-            $this->addFlash('success', 'Montant Recu: '.$postData['ceAmount'].' FCFA');
+            $this->addFlash('success', 'Montant Recu: '.number_format($postData['ceAmount']).' FCFA');
             return $this->redirectToRoute('ceaccount_show',['id'=>$account->getId()]);
         }
 
@@ -243,7 +265,7 @@ class AccountController extends AbstractController
             $this->addFlash('warning', 'Account is inactive');
             return $this->redirectToRoute('ceaccount_show',['id'=>$account->getId()]);
         }
-        if(!$account->getIsCommercial() && !$account->getIsBankAccount()){
+        if(!$account->getIsCommercial() && !$account->getIsBankAccount() && !$account->getIsCash()){
             $this->addFlash('warning', 'Must be a commercial account');
             return $this->redirectToRoute('ceaccount_show',['id'=>$account->getId()]);
         }
@@ -276,7 +298,7 @@ class AccountController extends AbstractController
             $manager->persist($accountEntry);
             
             $manager->flush();
-            $this->addFlash('success', 'Montant Recu: '.number_format($postData['Montant'].' FCFA'));
+            $this->addFlash('success', 'Montant Recu: '.number_format($postData['Montant']).' FCFA');
             return $this->redirectToRoute('ceaccount_show',['id'=>$account->getId()]);
         }
 
@@ -309,6 +331,7 @@ class AccountController extends AbstractController
 
         $accountAlias = $account->getCeAccountCode().' - '.$account->getCeAccountName();
         $mobileMoneyAccountes = $accountRepo->getMobileMoneyAccounts();
+        $cashAccounts = $accountRepo->findBy(['isCash'=>1]);
         $mainData = [];
 
         $mobNum = (string)$account->getCeAccountNumber();
@@ -317,6 +340,9 @@ class AccountController extends AbstractController
             if ($netCode == $networkRep->getNetworkCode($mobAccount->getCeAccountNumber())) {
                 $mainData[$mobAccount->getCeAccountCode().' - '.number_format($mobAccount->getCeAccountBalance())]=$mobAccount->getId();
             }
+        }
+        foreach ($cashAccounts as $key => $cashAccount) {
+            $mainData[$cashAccount->getCeAccountCode().' - '.number_format($cashAccount->getCeAccountBalance())] = $cashAccount->getId();
         }
         $data = [];
 
@@ -333,13 +359,20 @@ class AccountController extends AbstractController
             $postData = $reqt->request->get('form');
             $fromAccount = $accountRepo->find(intval($postData['deCompte']));
             $fromAccountBalance = $fromAccount->getCeAccountBalance();
-
-            $charge = $chargeRepo->getOrderCharge(intval($postData['Montant']),$networkRep->getNetworkId($account->getCeAccountNumber()));
-            $debit = intval($postData['Montant'])+$charge;
+            if ($account->getIsMobileMoney()) {
+                $charge = $chargeRepo->getOrderCharge(intval($postData['Montant']),$networkRep->getNetworkId($account->getCeAccountNumber()));
+                $debit = intval($postData['Montant'])+$charge;
+            }else{
+                $debit = intval($postData['Montant']);
+            }
 
             if ($debit > $fromAccountBalance)  {
-                $maxCharge = $chargeRepo->getOrderCharge($fromAccountBalance,$networkRep->getNetworkId($account->getCeAccountNumber()));
-                $maxCharge = $fromAccountBalance - $maxCharge;
+                if ($account->getIsMobileMoney()) {
+                    $maxCharge = $chargeRepo->getOrderCharge($fromAccountBalance,$networkRep->getNetworkId($account->getCeAccountNumber()));
+                    $maxCharge = $fromAccountBalance - $maxCharge;
+                }else{
+                    $maxCharge = $fromAccountBalance;
+                }
                 $this->addFlash('warning', 'Solde Insuffisant ! Maximum: '.number_format($maxCharge));
                 return $this->redirectToRoute('ceaccount_buy',['id'=>$account->getId(), 'account'=>$account,'buyForm'=>$buyForm->createView()]);
             }

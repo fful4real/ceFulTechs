@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\CeAccount;
+use App\Entity\CeAccountEntry;
 use App\Entity\Ceorder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -109,9 +111,18 @@ class CeorderRepository extends ServiceEntityRepository
     }
 
     
-    public function getPagination($page=1, $limit=10, $options=[])
+    public function getPagination($page=1, $limit=10, $options=[],$class=null)
     {
-        $pages = ceil(count($this->findBy($options))/$limit);
+        switch ($class) {
+            case 'CeAccountEntry':
+                $repo = $this->getEntityManager()->getRepository(CeAccountEntry::class);
+                $pages = ceil(count($repo->findBy($options))/$limit);
+                break;
+            
+            default:
+                $pages = ceil(count($this->findBy($options))/$limit);
+                break;
+        }
         $page = $page > $pages ? 1 : $page;
         $var = ceil($page/5);
         $startPage = $var > 1 ? (($var-1)*5)+1 : $var;
@@ -119,10 +130,12 @@ class CeorderRepository extends ServiceEntityRepository
         for ($i=$startPage, $j=0; $i <= $pages; $i++, $j++) {
             if ($j==5)
                 break;
-            $pagination.='<li class="page-item ';
-            if ($i == $page)
-                $pagination.='active';
-            $pagination .= '"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+
+            if ($i == $page) {
+                $pagination.='<li class="page-item active"><a class="page-link">'.$i.'</a></li>';
+            }else{
+                $pagination.='<li class="page-item"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+            }
         }
         if ($page > 1) {
             $k = $page-1;

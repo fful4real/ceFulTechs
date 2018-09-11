@@ -87,9 +87,9 @@ class CeAccountEntryRepository extends ServiceEntityRepository
             LEFT JOIN (SELECT fk_ce_account_id AS accountId3, SUM(ce_amount) AS sumToday FROM ce_account_entry WHERE CAST(CURRENT_DATE AS DATE) = CAST(datec AS DATE) GROUP BY fk_ce_account_id) AS CEAE2 
             ON CEAE.accountId1 = CEAE2.accountId3
             LEFT JOIN
-            (SELECT id AS accountId, is_commercial AS isCommercial, ce_account_code AS accountCode FROM ce_account) AS CEA
+            (SELECT id AS accountId, is_commercial AS isCommercial, ce_account_code AS accountCode, is_cash AS isCash FROM ce_account) AS CEA
             ON CEA.accountId = CEAE.accountId1
-            WHERE CEA.isCommercial = 0";
+            WHERE CEA.isCommercial = 0 and CEA.isCash != 1";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 

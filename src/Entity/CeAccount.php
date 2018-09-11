@@ -119,6 +119,11 @@ class CeAccount
      */
     private $ceCreatedBy;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isCash;
+
     public function __construct()
     {
         $this->fkCeAccountEntries = new ArrayCollection();
@@ -375,6 +380,18 @@ class CeAccount
     public function setCeCreatedBy(?CeUser $ceCreatedBy): self
     {
         $this->ceCreatedBy = $ceCreatedBy;
+
+        return $this;
+    }
+
+    public function getIsCash(): ?bool
+    {
+        return $this->isCash;
+    }
+
+    public function setIsCash(?bool $isCash): self
+    {
+        $this->isCash = $isCash;
 
         return $this;
     }

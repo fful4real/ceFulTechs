@@ -46,10 +46,6 @@ class CeorderController extends AbstractController
     public function orderList(CeorderRepository $repo, CeCustomerRepository $customerRepo, CeTownRepository $townRepo,CeStatusRepository $statusRepo, Request $reqt)
     {
         $limit = 10;
-        $em = $this->getDoctrine()->getEntityManager();
-        $query = $em->createQueryBuilder();
-        $pages = ceil(count($repo->findBy([]))/$limit);
-
         $page = intval($reqt->query->get('page')) ?:1;
         $pagination = $repo->getPagination($page,$limit);
         $offset = ($page - 1)  * $limit;
@@ -84,8 +80,6 @@ class CeorderController extends AbstractController
     {
 
         $limit = 5;
-        $em = $this->getDoctrine()->getEntityManager();
-        $query = $em->createQueryBuilder();
         $status = $statusRepo->find(1);
         $options = ['ceStatus'=>$statusRepo->find(1)];
         $pages = ceil(count($repo->findBy(['ceStatus'=>$status]))/$limit);

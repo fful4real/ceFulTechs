@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Order - FulTechs{% endblock %}
+{% block title %}Account - FulTechs{% endblock %}
 
 {% block body%}
 
@@ -15,7 +15,6 @@
           <h6 class="slim-pagetitle">Compte</h6>
         </div><!-- slim-pageheader -->
 
-        {% include 'flash.html.twig' %}
         <div class="row row-sm">
           <div class="col-lg-8">
           {% include 'flash.html.twig' %}
@@ -38,7 +37,7 @@
               <li class="nav-item"><a href="{{path('ceaccount_buy',{'id':account.id})}}" class="nav-link"><i class="icon ion-ios-download-outline tx-purple"></i> Nouveau Achat</a></li>
               <li class="nav-item"><a href="{{path('ceaccount_deposit',{'id':account.id})}}" class="nav-link"><i class="icon ion-ios-download-outline tx-teal"></i> Nouveau Depot</a></li>
             {% endif %}
-            {% if account.isBankAccount%}
+            {% if account.isBankAccount or account.isCash %}
             <li class="nav-item"><a href="{{path('ceaccount_deposit',{'id':account.id})}}" class="nav-link"><i class="icon ion-ios-download-outline tx-teal"></i> Nouveau Depot</a></li>
             {% endif %}
             </ul><!-- nav -->
