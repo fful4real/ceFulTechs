@@ -365,7 +365,6 @@ class AccountController extends AbstractController
             }else{
                 $creditAmount = intval($postData['Montant']);
             }
-            var_dump('Felix Debit : '. $creditAmount);
             $debit = intval($postData['Montant']);
             die();
             if ($debit > $fromAccountBalance)  {
