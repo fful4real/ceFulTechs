@@ -367,7 +367,7 @@ class AccountController extends AbstractController
                 $creditAmount = intval($postData['Montant']);
             }
             $debit = intval($postData['Montant']);
-            $checkCredit = $debit+$charge;
+            
             if ($debit+$charge > $fromAccountBalance)  {
                 if ($fromAccount->getIsMobileMoney()) {
                     $maxCharge = $chargeRepo->getOrderCharge($fromAccountBalance,$networkRep->getNetworkId($account->getCeAccountNumber()));
