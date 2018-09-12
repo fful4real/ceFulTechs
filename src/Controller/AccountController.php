@@ -357,6 +357,7 @@ class AccountController extends AbstractController
         $buyForm->handleRequest($reqt);
         if ($buyForm->isSubmitted()&& $buyForm->isValid()) {
             $postData = $reqt->request->get('form');
+            $charge = 0;
             $fromAccount = $accountRepo->find(intval($postData['deCompte']));
             $fromAccountBalance = $fromAccount->getCeAccountBalance();
             if ($fromAccount->getIsMobileMoney()) {
@@ -366,9 +367,9 @@ class AccountController extends AbstractController
                 $creditAmount = intval($postData['Montant']);
             }
             $debit = intval($postData['Montant']);
-            die();
-            if ($debit > $fromAccountBalance)  {
-                if ($account->getIsMobileMoney()) {
+            $checkCredit = $debit+$charge;
+            if ($debit+$charge > $fromAccountBalance)  {
+                if ($fromAccount->getIsMobileMoney()) {
                     $maxCharge = $chargeRepo->getOrderCharge($fromAccountBalance,$networkRep->getNetworkId($account->getCeAccountNumber()));
                     $maxCharge = $fromAccountBalance - $maxCharge;
                 }else{
@@ -407,6 +408,7 @@ class AccountController extends AbstractController
             
             $manager->flush();
             $this->addFlash('success', 'Montant Recu: '.number_format($creditAmount).' FCFA');
+
             return $this->redirectToRoute('ceaccount_show',['id'=>$account->getId()]);
         }
 
