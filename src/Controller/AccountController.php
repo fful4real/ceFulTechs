@@ -359,13 +359,15 @@ class AccountController extends AbstractController
             $postData = $reqt->request->get('form');
             $fromAccount = $accountRepo->find(intval($postData['deCompte']));
             $fromAccountBalance = $fromAccount->getCeAccountBalance();
-            if ($account->getIsMobileMoney()) {
+            if ($fromAccount->getIsMobileMoney()) {
                 $charge = $chargeRepo->getOrderCharge(intval($postData['Montant']),$networkRep->getNetworkId($account->getCeAccountNumber()));
-                $debit = intval($postData['Montant'])+$charge;
+                $creditAmount = intval($postData['Montant'])-$charge;
             }else{
-                $debit = intval($postData['Montant']);
+                $creditAmount = intval($postData['Montant']);
             }
-
+            var_dump('Felix Debit : '. $creditAmount);
+            $debit = intval($postData['Montant']);
+            die();
             if ($debit > $fromAccountBalance)  {
                 if ($account->getIsMobileMoney()) {
                     $maxCharge = $chargeRepo->getOrderCharge($fromAccountBalance,$networkRep->getNetworkId($account->getCeAccountNumber()));
@@ -376,7 +378,6 @@ class AccountController extends AbstractController
                 $this->addFlash('warning', 'Solde Insuffisant ! Maximum: '.number_format($maxCharge));
                 return $this->redirectToRoute('ceaccount_buy',['id'=>$account->getId(), 'account'=>$account,'buyForm'=>$buyForm->createView()]);
             }
-            $creditAmount = intval($postData['Montant']);
 
             $debitEntry = new CeAccountEntry();
             $creditEntry = new CeAccountEntry();
