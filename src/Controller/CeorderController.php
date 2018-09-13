@@ -258,8 +258,6 @@ class CeorderController extends AbstractController
 
     		$orderRef = $orderRep->makeRef($orderRepRef->getOrderTypeCode());
 
-    		//var_dump($orderRef);
-
     		$ceorder->setCeOrderref($orderRef);
     		$currency = $currencyRep->find(1);
     		$status = $statusRep->find(1);

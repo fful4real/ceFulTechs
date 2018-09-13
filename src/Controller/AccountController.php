@@ -362,13 +362,14 @@ class AccountController extends AbstractController
             $fromAccountBalance = $fromAccount->getCeAccountBalance();
             if ($fromAccount->getIsMobileMoney()) {
                 $charge = $chargeRepo->getOrderCharge(intval($postData['Montant']),$networkRep->getNetworkId($account->getCeAccountNumber()));
-                $creditAmount = intval($postData['Montant'])-$charge;
+                $debit = intval($postData['Montant'])+$charge;
             }else{
-                $creditAmount = intval($postData['Montant']);
+                $debit = intval($postData['Montant']);
             }
-            $debit = intval($postData['Montant']);
             
-            if ($debit+$charge > $fromAccountBalance)  {
+            $creditAmount = intval($postData['Montant']);
+
+            if ($debit > $fromAccountBalance)  {
                 if ($fromAccount->getIsMobileMoney()) {
                     $maxCharge = $chargeRepo->getOrderCharge($fromAccountBalance,$networkRep->getNetworkId($account->getCeAccountNumber()));
                     $maxCharge = $fromAccountBalance - $maxCharge;

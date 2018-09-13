@@ -75,7 +75,8 @@
                     {% for key, account in accounts %}
 
                       <a href="{{path('ceaccount_show',{'id':account.id})}}">
-                        <label class="mg-b-5 tx-gray-600">{{ account.ceAccountBalance | number_format(0,'.',',')}} Compte - {{ account.ceAccountCode}}</label>
+                        <label class="mg-b-5 tx-gray-600">
+                        {{ account.ceAccountBalance | number_format(0,'.',',')}} Compte - {{ account.ceAccountCode}} ({{(account.ceAccountBalance/balance)*100|number_format(2)|trim(0)}})%</label>
                         <div class="progress mg-b-15">
                               <div class="progress-bar bg-{{colors[account.ceAccountCode]}} progress-bar-xs" style="width: {{colors[account.ceAccountNumber]}}%" role="progressbar" aria-valuenow="{{colors[account.ceAccountNumber]}}" aria-valuemin="0" aria-valuemax="100"></div>
                           </div><!-- progress -->
