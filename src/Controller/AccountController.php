@@ -119,6 +119,9 @@ class AccountController extends AbstractController
         if (!$account) {
             $account = new CeAccount();
             $account->setCeCreatedBy($this->getUser());
+            $editMode = false;
+        }else{
+            $editMode = true;
         }
 
         //var_dump($reqt->request->get('account'));
@@ -171,6 +174,8 @@ class AccountController extends AbstractController
 
         return $this->render('account/accountform.html.twig', [
             'controller_name' => 'AccountController', 'accountForm'=>$accountForm->createView(),
+            'editMode'=>$editMode,
+            'ceaccount'=>$account->getId()?$account->getId():false,
         ]);
     }
 
@@ -426,10 +431,15 @@ class AccountController extends AbstractController
     {
         $toalEtries = $entryRepo->getTotalEntries($account)[0]['amount'] ?: 0;
         $totalOuts = $entryRepo->getTotalOuts($account)[0]['amount'] ?: 0;
+        $accountTransactions = $entryRepo->getAccountTransactions($account);
+        $last5 = $entryRepo->findBy(['fkCeAccount'=>$account], array('datec' => 'DESC'),4,0);
+        // var_dump($last5);
         return $this->render('account/show.html.twig', [
             'account' => $account,
             'totalEntry'=>$toalEtries,
-            'totalOut'=>$totalOuts
+            'totalOut'=>$totalOuts,
+            'accountTransactions'=>$accountTransactions,
+            'last5'=>$last5,
         ]);
     }
 }

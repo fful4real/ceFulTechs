@@ -15,19 +15,194 @@
           <h6 class="slim-pagetitle">Compte</h6>
         </div><!-- slim-pageheader -->
 
-        <div class="row row-sm">
-          <div class="col-lg-8">
+        
+        <div class="section-wrapper mg-t-20">
+          <label class="section-title mg-b-20">Compte: <span>{{account.ceAccountCode}} (<span class="text-info">{{account.ceAccountBalance | number_format(0, '.', ',')}} FCFA</span>)</span></label>
           {% include 'flash.html.twig' %}
-            <div class="card-deck card-deck-sm mg-x-0">
-              <div class="card card-body pd-25">
-                <h6 class="slim-card-title mg-b-10">Compte: {{account.ceAccountCode}}  - {{account.ceAccountName}}</h6>
-                <h6 class="slim-card-title mg-b-10">Numero: <span class="tx-info">{{account.ceAccountNumber}}</span></h6>
-                <div>
-                  <h3 class="tx-info"> <span class="tx-gray-600">Solde: </span>{{account.ceAccountBalance | number_format(0, '.', ',')}} FCFA</h3>
+
+          <div class="row">
+            <div class="col-md">
+              <div class="card border border-success">
+                <div class="card-body">
+                  <h5 class="card-title tx-dark text-success tx-medium mg-b-10">Details du compte</h5>
+                  
+                  <div class="row mg-b-5">
+                    <div class="col">
+                      <strong class="mg-l-10  tx-gray-600">Code: </strong>
+                    </div>
+                    <div class="col">
+                      <span class="mg-l-10  tx-gray-600">{{account.ceAccountCode}}</span>
+                    </div>
+                  </div>
+                  <div class="row mg-b-5">
+                    <div class="col">
+                      <strong class="mg-l-10  tx-gray-600">Mumero: </strong>
+                    </div>
+                    <div class="col">
+                      <span class="mg-l-10  tx-gray-600">{{account.ceAccountNumber}}</span>
+                    </div>
+                  </div>
+                  <div class="row mg-b-5">
+                    <div class="col">
+                      <strong class="mg-l-10  tx-gray-600">Nom: </strong>
+                    </div>
+                    <div class="col">
+                      <span class="mg-l-10  tx-gray-600">{{account.ceAccountName}}</span>
+                    </div>
+                  </div>
+                  <div class="row mg-b-5">
+                    <div class="col">
+                      <strong class="mg-l-10  tx-gray-600">Solde: </strong>
+                    </div>
+                    <div class="col">
+                      <span class="mg-l-10  tx-gray-600">{{account.ceAccountBalance | number_format(0, '.', ',')}} FCFA</span>
+                    </div>
+                  </div>
+                  <div class="row mg-t-10">
+                    <div class="col justify-content-start">
+                      <a href="{{path('ceaccount_edit',{'id':account.id})}}" class="btn btn-warning bd-0">Modifier</a>
+                    </div>
+                    <div class="col justify-content-start">
+                      <a href="" class="btn btn-danger bd-0 pull-right">Supprimer</a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <ul class="nav nav-activity-profile mg-t-20 mg-b-20">
+              </div><!-- card -->
+            </div><!-- col -->
+            <div class="col-md mg-t-20 mg-md-t-0">
+              <div class="card border border-primary">
+                <div class="card-body card-sales">
+                  <h5 class="card-title tx-medium text-primary mg-b-10">Transactions</h5>
+                  <ul class="nav nav-tabs" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active show" href="#MPB" role="tab" data-toggle="tab">Today</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link " href="#MPF" role="tab" data-toggle="tab">Week</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link " href="#MPV" role="tab" data-toggle="tab">Month</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link " href="#MPD" role="tab" data-toggle="tab">Total</a>
+                      </li>
+                  </ul><!--  Tab panes -->
+                  
+                  <div class="tab-content mg-t-10">
+                      <div role="tabpanel" class="tab-pane fade in  active show" id="MPB">
+                        <div class="row">
+                          <div class="col text-center">
+                            <label class="tx-12">Credits</label>
+                            <p>{{accountTransactions.creditToday|number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                          <div class="col text-center">
+                            <label class="tx-12">Debits</label>
+                            <p>{{accountTransactions.debitToday|number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                        </div>
+                        <div class="progress mg-b-5">
+                          <div class="progress-bar bg-info wd-50p" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 100% "> Not Important</div>
+                        </div>
+                      </div>
+                      <div role="tabpanel" class="tab-pane fade in  " id="MPF">
+                        <div class="row">
+                          <div class="col text-center">
+                            <label class="tx-12">Credtis</label>
+                            <p>{{accountTransactions.creditWeek | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                          <div class="col text-center">
+                            <label class="tx-12">Debits</label>
+                            <p>{{accountTransactions.debitWeek | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                        </div>
+                        {% if account.isMobileMoney%}
+                          {% set percWeek = ((accountTransactions.creditWeek+accountTransactions.debitWeek)/1000000)*100%}
+                        <div class="progress mg-b-5">
+                          <div class="progress-bar felix bg-{% if percWeek > 80 %}warning{%else%}primary{%endif%} wd-50p" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{percWeek|round(2,'floor')}}% "> {{percWeek|round(2,'floor')}}%</div>
+                        </div>
+                        {% else %}
+                        <div class="progress mg-b-5">
+                          <div class="progress-bar bg-info wd-50p" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:100% ">Not Important</div>
+                        </div>
+                        {%endif%}
+                      </div>
+                                            <div role="tabpanel" class="tab-pane fade in  " id="MPV">
+                        <div class="row">
+                          <div class="col text-center">
+                            <label class="tx-12">Credits</label>
+                            <p>{{accountTransactions.creditMonth | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                          <div class="col text-center">
+                            <label class="tx-12">Debits</label>
+                            <p>{{accountTransactions.debitMonth | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                        </div>
+                        {% if account.isMobileMoney%}
+                          {% set percMonth = ((accountTransactions.creditMonth+accountTransactions.debitMonth)/5000000)*100%}
+                        <div class="progress mg-b-5">
+                          <div class="progress-bar bg-{% if percMonth > 80 %}warning{%else%}primary{%endif%} wd-50p" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{percMonth|round(2,'floor')}}% "> {{percMonth|round(2,'floor')}}%</div>
+                        </div>
+                        {% else %}
+                        <div class="progress mg-b-5">
+                          <div class="progress-bar bg-info wd-50p" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:100% ">Not Important</div>
+                        </div>
+                        {%endif%}
+                      </div>
+                      <div role="tabpanel" class="tab-pane fade in  " id="MPD">
+                        <div class="row">
+                          <div class="col text-center">
+                            <label class="tx-12">Credits</label>
+                            <p>{{totalEntry | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                          <div class="col text-center">
+                            <label class="tx-12">Debits</label>
+                            <p>{{totalOut | number_format(0, '.', ',')}}</p>
+                          </div><!-- col -->
+                        </div>
+                        <div class="progress mg-b-5">
+                          <div class="progress-bar bg-info wd-50p" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:100% ">Not Important</div>
+                        </div>
+                      </div>
+                  </div>
+                  <!-- Tab content -->
+                </div>
+              </div><!-- card -->
+            </div><!-- col -->
+            <div class="col-md mg-t-20 mg-md-t-0">
+              <div class="card border border-danger">
+                <div class="card-body">
+                  <h5 class="card-title tx-danger text-purple mg-b-10">Last 4 Transactions</h5>
+                  <div class="row" style="min-height: 104px">
+                    {% for transaction in last5%}
+                      <div class="col-12 d-flex align-items-start mg-b-5 pd-l-10 pd-r-25">
+                        <span class="mg-l-10  tx-gray-600">{%if transaction.isDebit%}<i class="fa fa-arrow-circle-down mg-r-5 tx-warning"></i>Debit{%else%}<i class="fa fa-arrow-circle-up mg-r-5 tx-info"></i>Credit{%endif%}: </span>
+                        <span class="mg-l-auto tx-gray-600 tx-right">{{transaction.ceAmount|number_format('0','.',',')}}</span>
+                      </div>
+                    {%endfor%}
+                  </div>
+                  <a href="{{path('ceaccount_credits',{'id':account.id})}}" class="bg-light">
+                    <div class="d-flex align-items-center mg-b-5 bg-light pd-l-5 pd-r-5">
+                      <span class="square-10 bg-success square-8"></span>
+                      <span class="mg-l-10  tx-gray-600">All Credits: </span>
+                      <span class="mg-l-auto tx-gray-600 tx-right">{{totalEntry | number_format(0, '.', ',')}}</span>
+                    </div>
+                  </a>
+                  <a href="{{path('ceaccount_debits',{'id':account.id})}}">
+                    <div class="d-flex align-items-center bg-light pd-l-5 pd-r-5">
+                      <span class="square-10 bg-danger square-8"></span>
+                      <span class="mg-l-10  tx-gray-600">All Debits: </span>
+                      <span class="mg-l-auto tx-gray-600 tx-right">{{totalOut | number_format(0, '.', ',')}}</span>
+                    </div>
+                  </a>
+                </div>
+              </div><!-- card -->
+            </div><!-- col -->
+          </div><!-- row -->
+        </div>
+
+        <div class="row row-sm mg-t-10">
+          <div class="col-lg-12">
+            <ul class="nav nav-activity-profile mg-b-20">
             {% if account.isMobileMoney%}
               <li class="nav-item"><a href="{{path('ceaccount_transfer',{'id':account.id})}}" class="nav-link"><i class="icon ion-ios-undo tx-pink"></i> Nouveau Transfert</a></li>
               <li class="nav-item"><a href="{{path('ceaccount_receive',{'id':account.id})}}" class="nav-link"><i class="icon ion-ios-redo tx-success"></i> Nouvelle Reception</a></li>
@@ -41,42 +216,7 @@
             <li class="nav-item"><a href="{{path('ceaccount_deposit',{'id':account.id})}}" class="nav-link"><i class="icon ion-ios-download-outline tx-teal"></i> Nouveau Depot</a></li>
             {% endif %}
             </ul><!-- nav -->
-          </div><!-- col-8 -->
-
-          <div class="col-lg-4 mg-lg-t-0">
-
-            <div class="card-deck card-deck-sm mg-x-0">
-              <div class="card card-body pd-25">
-                <div class="pd-10">
-                  <span class="peity-donut" data-peity="{ &quot;fill&quot;: [&quot;#663090&quot;,&quot;#EC1778&quot;,&quot;#25B1DE&quot;], &quot;height&quot;: 70, &quot;width&quot;: 200 }" style="display: none;">{{totalEntry}},{{totalOut}},{{account.ceAccountBalance}}</span><svg class="peity" height="70" width="200"><path d="M 100 0 A 35 35 0 1 1 88.0292949836016 67.8892417275068 L 94.0146474918008 51.4446208637534 A 17.5 17.5 0 1 0 100 17.5" data-value="10" fill="#663090"></path><path d="M 88.0292949836016 67.8892417275068 A 35 35 0 0 1 65.53172864457272 28.92231378165745 L 82.76586432228636 31.961156890828725 A 17.5 17.5 0 0 0 94.0146474918008 51.4446208637534" data-value="4" fill="#EC1778"></path><path d="M 65.53172864457272 28.92231378165745 A 35 35 0 0 1 100 0 L 100 17.5 A 17.5 17.5 0 0 0 82.76586432228636 31.961156890828725" data-value="4" fill="#25B1DE"></path></svg>
-                </div>
-                <a href="{{path('ceaccount_credits',{'id':account.id})}}">
-                <div class="d-flex align-items-center">
-                  <span class="square-10 bg-purple rounded-circle"></span>
-                  <span class="mg-l-10  tx-gray-600">Total Entree: </span>
-                  <span class="mg-l-auto tx-gray-600 tx-right">{{totalEntry | number_format(0, '.', ',')}}</span>
-                </div>
-                  
-                </a>
-                <a href="{{path('ceaccount_debits',{'id':account.id})}}">
-                  <div class="d-flex align-items-center mg-t-5">
-                    <span class="square-10 bg-pink rounded-circle"></span>
-                    <span class="mg-l-10">Total Sortie: </span>
-                    <span class="mg-l-auto tx-lato tx-right">{{totalOut | number_format(0, '.', ',')}}</span>
-                  </div>
-                </a>
-                <div class="d-flex align-items-center mg-t-5">
-                  <span class="square-10 bg-info rounded-circle"></span>
-                  <span class="mg-l-10">Solde: </span>
-                  <span class="mg-l-auto tx-lato tx-right">{{account.ceAccountBalance | number_format(0, '.', ',')}}</span>
-                </div>
-                <div class="form-layout-footer mg-t-10">
-                  <a href="{{path('ceaccount_edit',{'id':account.id})}}" class="btn btn-warning bd-0">Modifier</a>
-                  <a href="" class="btn btn-danger bd-0">Supprimer</a>
-                </div>
-              </div>
-            </div>
-          </div><!-- col-4 -->
+          </div><!-- col-12 -->
         </div>
 
 

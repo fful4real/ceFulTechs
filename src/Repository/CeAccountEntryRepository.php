@@ -97,4 +97,35 @@ class CeAccountEntryRepository extends ServiceEntityRepository
 
     }
 
+    public function getAccountTransactions(CeAccount $account){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM (
+                    SELECT * FROM (SELECT fk_ce_account_id AS accountId, SUM(ce_amount) AS creditMonth FROM ce_account_entry WHERE MONTH(CURRENT_DATE) = MONTH(datec) and is_debit = 0 GROUP BY fk_ce_account_id) AS CEAE
+                    LEFT JOIN
+                        (SELECT fk_ce_account_id AS accountId2, SUM(ce_amount) as debitMonth FROM ce_account_entry WHERE MONTH(CURRENT_DATE) = MONTH(datec) and is_debit = 1 GROUP BY fk_ce_account_id) AS CEAE1
+                        ON CEAE.accountId = CEAE1.accountId2
+                    ) AS monthValues
+                    LEFT JOIN
+                    (SELECT * FROM (
+                    SELECT * FROM (SELECT fk_ce_account_id AS accountId, SUM(ce_amount) AS creditWeek FROM ce_account_entry WHERE WEEK(CURRENT_DATE) = WEEK(datec) and is_debit = 0 GROUP BY fk_ce_account_id) AS CEAE
+                    LEFT JOIN
+                        (SELECT fk_ce_account_id AS accountId2, SUM(ce_amount) as debitWeek FROM ce_account_entry WHERE WEEK(CURRENT_DATE) = WEEK(datec) and is_debit = 1 GROUP BY fk_ce_account_id) AS CEAE1
+                        ON CEAE.accountId = CEAE1.accountId2
+                    ) AS weekValues1) AS weekValues
+                    ON monthValues.accountId = weekValues.accountId
+                    LEFT JOIN
+                    (SELECT * FROM (
+                    SELECT * FROM (SELECT fk_ce_account_id AS accountId, SUM(ce_amount) AS creditToday FROM ce_account_entry WHERE CAST(CURRENT_DATE AS DATE) = CAST(datec AS DATE) and is_debit = 0 GROUP BY fk_ce_account_id) AS CEAE
+                    LEFT JOIN
+                        (SELECT fk_ce_account_id AS accountId2, SUM(ce_amount) as debitToday FROM ce_account_entry WHERE CAST(CURRENT_DATE AS DATE) = CAST(datec AS DATE) and is_debit = 1 GROUP BY fk_ce_account_id) AS CEAE1
+                        ON CEAE.accountId = CEAE1.accountId2
+                    ) AS todayValues1) AS todayValues
+                    ON monthValues.accountId = todayValues.accountId
+                    WHERE monthValues.accountId = :accountId";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['accountId'=>$account->getId()]);
+
+        return $stmt->fetchAll()[0];
+    }
+
 }
