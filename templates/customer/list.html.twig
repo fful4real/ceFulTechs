@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Customers - FulTechs{% endblock %}
+{% block stylesheets %}
+  <link href="{{asset('lib/datatables/css/jquery.dataTables.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/select2.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block body %}
+    <div class="slim-mainpanel">
+      <div class="container">
+        <div class="slim-pageheader">
+          <ol class="breadcrumb slim-breadcrumb">
+            <li class="breadcrumb-item"><a href="{{path('dashboard',{})}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">List Clients</li>
+          </ol>
+          <h6 class="slim-pagetitle">List Clients</h6>
+        </div><!-- slim-pageheader -->
+          {% include 'flash.html.twig' %}
+
+        <div class="section-wrapper">
+          <label class="section-title">List Of Customers</label>
+          <div class="table-wrapper">
+            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display">
+              <thead>
+                <tr>
+                  <th class="wd-15p">Names</th>
+                  <th class="wd-20p">Mobile</th>
+                  <th class="wd-20p">Town</th>
+                  <th class="wd-20p">Orders</th>
+                  <th class="wd-20p">Total Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                {% for key, customer in customerData %}
+	                <tr class='clickable-row' data-href="{{path('customer_show',{'id':customer.customerId})}}" title="{{customer.firstName}}">
+	                  <td><i class="icon ion-person tx-20 pd-r-10 text-primary"></i>{{customer.firstName}} {{customer.lastName}}</td>
+	                  <td>{{customer.mobNum}}</td>
+	                  <td>{{customer.townAlias}}</td>
+	                  <td>{{customer.orderCount}}</td>
+	                  <td>{{customer.sumCustomer}}</td>
+	                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div><!-- table-wrapper -->
+          
+          <div class="pagination-wrapper border-left-0 border-right-0 border-bottom-0">
+            <nav aria-label="Page navigation">
+              <ul class="pagination mg-b-0">
+                {{pagination|raw}}
+              </ul>
+            </nav>
+          </div>
+        </div><!-- section-wrapper -->
+
+
+      </div><!-- container -->
+    </div><!-- slim-mainpanel -->
+{% endblock %}
+{% block javascripts %}
+  <script src="{{asset('lib/datatables/js/jquery.dataTables.js')}}"></script>
+  <script src="{{asset('lib/datatables-responsive/js/dataTables.responsive.js')}}"></script>
+  <script src="{{asset('lib/select2/js/select2.min.js')}}"></script>
+{% endblock %}
+{% block customscript%}
+  <script>
+      $(function(){
+        'use strict';
+
+        $('#datatable1').DataTable({
+          responsive: true,
+          language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
+          },
+          pagingType: "simple"
+        });
+
+        // Select2
+        $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+
+      });
+    </script>
+{%endblock%}
