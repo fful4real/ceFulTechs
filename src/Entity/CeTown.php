@@ -53,9 +53,15 @@ class CeTown
      */
     private $fkCeTown;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CeCustomer", mappedBy="fkCeTown")
+     */
+    private $ceCustomers;
+
     public function __construct()
     {
         $this->fkCeTown = new ArrayCollection();
+        $this->ceCustomers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,37 @@ class CeTown
             // set the owning side to null (unless already changed)
             if ($fkCeTown->getFkCeTown() === $this) {
                 $fkCeTown->setFkCeTown(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CeCustomer[]
+     */
+    public function getCeCustomers(): Collection
+    {
+        return $this->ceCustomers;
+    }
+
+    public function addCeCustomer(CeCustomer $ceCustomer): self
+    {
+        if (!$this->ceCustomers->contains($ceCustomer)) {
+            $this->ceCustomers[] = $ceCustomer;
+            $ceCustomer->setFkCeTown($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCeCustomer(CeCustomer $ceCustomer): self
+    {
+        if ($this->ceCustomers->contains($ceCustomer)) {
+            $this->ceCustomers->removeElement($ceCustomer);
+            // set the owning side to null (unless already changed)
+            if ($ceCustomer->getFkCeTown() === $this) {
+                $ceCustomer->setFkCeTown(null);
             }
         }
 

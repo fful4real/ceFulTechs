@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Repository\CeAccountEntryRepository;
+use App\Repository\CeAccountRepository;
+use App\Repository\CeCustomerRepository;
+use App\Repository\CeTownRepository;
+use App\Repository\CeorderRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Repository\CeorderRepository;
-use App\Repository\CeAccountRepository;
-use App\Repository\CeAccountEntryRepository;
 
 class DashboardController extends AbstractController
 {
@@ -16,8 +18,23 @@ class DashboardController extends AbstractController
      * @Route("/admin", name="admin")
      * @Route("/", name="home")
      */
-    public function index(CeorderRepository $orderRepo, CeAccountRepository $accountRepo, CeAccountEntryRepository $acEntryRepo)
+    public function index(CeTownRepository $townRepo, CeCustomerRepository $customerRepo, CeorderRepository $orderRepo, CeAccountRepository $accountRepo, CeAccountEntryRepository $acEntryRepo, ObjectManager $manager)
     {
+
+        // $values = $customerRepo->getCustomerData();
+        // foreach ($values as $key => $value) {
+        //     if ($value['fk_ce_town_id'] == null) {
+        //         $customer = $customerRepo->find(intval($value['id']));
+        //         $town = $townRepo->find(intval($value['townId']));
+        //         $customer->setFkCeTown($town);
+        //         $manager->persist($customer);
+        //     }
+            
+        // }
+
+        // $manager->flush();
+        // die('Done!');
+
         $acUsage = $acEntryRepo->getAcAvailability();
         
         $newOrdersCount = $orderRepo->getNewOrdersCount();

@@ -2,16 +2,19 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use App\Entity\CeCharge;
+use App\Entity\CeCurrency;
+use App\Entity\CeCustomer;
+use App\Entity\CeNetwork;
+use App\Entity\CeStatus;
+use App\Entity\CeTown;
 use App\Entity\Ceorder;
 use App\Entity\OrderType;
-use App\Entity\CeStatus;
-use App\Entity\CeCurrency;
-use App\Entity\CeCharge;
-use App\Entity\CeNetwork;
-use App\Entity\CeTown;
-use App\Entity\CeCustomer;
+use App\Repository\CeCustomerRepository;
+use App\Repository\CeTownRepository;
+use App\Repository\CeorderRepository;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class CeorderFixtures extends Fixture
 {

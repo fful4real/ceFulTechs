@@ -76,6 +76,11 @@ class CeCustomer
      */
     private $fkCeAccountEntries;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CeTown", inversedBy="ceCustomers")
+     */
+    private $fkCeTown;
+
     public function __construct()
     {
         $this->fkCeCustomer = new ArrayCollection();
@@ -229,6 +234,18 @@ class CeCustomer
                 $fkCeAccountEntry->setFkCeCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFkCeTown(): ?CeTown
+    {
+        return $this->fkCeTown;
+    }
+
+    public function setFkCeTown(?CeTown $fkCeTown): self
+    {
+        $this->fkCeTown = $fkCeTown;
 
         return $this;
     }

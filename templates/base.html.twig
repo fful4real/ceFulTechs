@@ -37,8 +37,8 @@
     <link href="{{asset('lib/rickshaw/css/rickshaw.min.css')}}" rel="stylesheet">
 
     <!-- Slim CSS -->
-    <link rel="stylesheet" href="{{asset('css/slim.css')}}">
     {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="{{asset('css/slim.css')}}">
 
   </head>
   <body class="dashboard-3">
@@ -203,7 +203,7 @@
               </ul>
             </div><!-- sub-item -->
           </li>
-          <li class="nav-item with-sub {% block activeNav2 %}{% endblock %}">
+          <li class="nav-item with-sub">
             <a class="nav-link" href="#">
               <i class="icon ion-ios-filing-outline"></i>
               <span>Comptes</span>
@@ -212,6 +212,18 @@
               <ul>
                 <li><a href="{{path('ceaccount_new')}}">Creer Compte</a></li>
                 <li><a href="{{path('ceaccount_list')}}">Liste de Comptes</a></li>
+              </ul>
+            </div><!-- sub-item -->
+          </li>
+          <li class="nav-item with-sub">
+            <a class="nav-link" href="#">
+              <i class="icon ion-ios-paper-outline"></i>
+              <span>Clients</span>
+            </a>
+            <div class="sub-item">
+              <ul>
+                <li><a href="{{path('customer_new')}}">Cree Client</a></li>
+                <li><a href="{{path('customer_list')}}">Liste Clients</a></li>
               </ul>
             </div><!-- sub-item -->
           </li>
@@ -230,69 +242,11 @@
     </div><!-- slim-footer -->
 
     <script src="{{asset('lib/jquery/js/jquery.js')}}"></script>
-    <script src="{{asset('lib/popper.js/js/popper.js')}}"></script>
     <script src="{{asset('lib/bootstrap/js/bootstrap.js')}}"></script>
     <script src="{{asset('lib/jquery.cookie/js/jquery.cookie.js')}}"></script>
-    <script src="{{asset('lib/d3/js/d3.js')}}"></script>
-    <script src="{{asset('lib/rickshaw/js/rickshaw.min.js')}}"></script>
-    <script src="{{asset('lib/Flot/js/jquery.flot.js')}}"></script>
-    <script src="{{asset('lib/Flot/js/jquery.flot.resize.js')}}"></script>
-    <script src="{{asset('lib/peity/js/jquery.peity.js')}}"></script>
-    <script src="{{asset('js/slim.js')}}"></script>
-
-<script>
-      $(function(){
-        'use strict'
-
-        var multibar = new Rickshaw.Graph({
-          element: document.querySelector('#chartMultiBar1'),
-          renderer: 'bar',
-          stack: false,
-          max: 60,
-          series: [{
-            data: [
-              { x: 0, y: 20 },
-              { x: 1, y: 25 },
-              { x: 2, y: 10 },
-              { x: 3, y: 15 },
-              { x: 4, y: 20 },
-              { x: 5, y: 40 },
-              { x: 6, y: 15 },
-              { x: 7, y: 40 },
-              { x: 8, y: 25 }
-            ],
-            color: '#065381'
-          },
-          {
-            data: [
-              { x: 0, y: 10 },
-              { x: 1, y: 30 },
-              { x: 2, y: 45 },
-              { x: 3, y: 30 },
-              { x: 4, y: 42 },
-              { x: 5, y: 20 },
-              { x: 6, y: 30 },
-              { x: 7, y: 15 },
-              { x: 8, y: 20 }
-            ],
-            color: '#34B2E4'
-          }]
-        });
-
-        multibar.render();
-
-        // Responsive Mode
-        new ResizeSensor($('.slim-mainpanel'), function(){
-          multibar.configure({
-            width: $('#chartMultiBar1').width(),
-            height: $('#chartMultiBar1').height()
-          });
-          multibar.render();
-        });
-
-      });
-    </script>
     {% block javascripts %}{% endblock %}
+    <script src="{{asset('js/slim.js')}}"></script>
+    {% block customscript %}{% endblock %}
   </body>
 </html>
 

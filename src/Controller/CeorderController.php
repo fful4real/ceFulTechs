@@ -45,7 +45,7 @@ class CeorderController extends AbstractController
      */
     public function orderList(CeorderRepository $repo, CeCustomerRepository $customerRepo, CeTownRepository $townRepo,CeStatusRepository $statusRepo, Request $reqt)
     {
-        $limit = 10;
+        $limit = 100;
         $page = intval($reqt->query->get('page')) ?:1;
         $pagination = $repo->getPagination($page,$limit);
         $offset = ($page - 1)  * $limit;
@@ -79,7 +79,7 @@ class CeorderController extends AbstractController
     public function ordersNew(CeorderRepository $repo, CeCustomerRepository $customerRepo, CeTownRepository $townRepo,CeStatusRepository $statusRepo, Request $reqt)
     {
 
-        $limit = 5;
+        $limit = 100;
         $status = $statusRepo->find(1);
         $options = ['ceStatus'=>$statusRepo->find(1)];
         $pages = ceil(count($repo->findBy(['ceStatus'=>$status]))/$limit);
@@ -275,7 +275,8 @@ class CeorderController extends AbstractController
     			$customer = new CeCustomer();
     			$customer->setFirstName($orderCustomer['firstName'])
     					->setLastName($orderCustomer['lastName'])
-    					->setMobNum($ceorder->getCeMobnum())
+                        ->setMobNum($ceorder->getCeMobnum())
+    					->setFkCeTown($ceorder->getFkCeTown())
     					->setDatec(new \DateTime())
     					->setTms(new \DateTime());
     			$manager->persist($customer);
@@ -322,11 +323,8 @@ class CeorderController extends AbstractController
     /**
      * @Route("/order/{id}", name="ceorder_show")
      */
-    public function showOrder(Ceorder $order, CeChargeRepository $chargeRep, CeAccountRepository $accountRepo)
+    public function showOrder(Ceorder $order, CeChargeRepository $chargeRep, CeAccountRepository $accountRepo, OrderTypeRepository $orderTypeRep, CeorderRepository $orderRep, CeNetworkRepository $networkRep)
     {
-    	$orderRep = $this->getDoctrine()->getRepository(CeOrder::class);
-    	$orderTypeRep = $this->getDoctrine()->getRepository(OrderType::class);
-    	$networkRep = $this->getDoctrine()->getRepository(CeNetwork::class);
 
     	//var_dump(serialize(array([22,33])));
 
