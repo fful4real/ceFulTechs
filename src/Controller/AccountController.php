@@ -61,9 +61,9 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('ceaccount_list');
         }
 
-        $limit = 10;
+        $limit = 100;
         $page = intval($reqt->query->get('page')) ?:1;
-        $pagination = $orderRepo->getPagination($page, $limit=10, $options=['fkCeAccount'=>$account, 'isDebit'=>0],$class='CeAccountEntry');
+        $pagination = $orderRepo->getPagination($page, $limit, ['fkCeAccount'=>$account, 'isDebit'=>0],'CeAccountEntry');
         $offset = ($page - 1)  * $limit;
         $accountEntries = $acEntryRepo->findBy(['fkCeAccount'=>$account, 'isDebit'=>0], array('datec' => 'DESC'),$limit,$offset);
 
@@ -89,9 +89,9 @@ class AccountController extends AbstractController
         }
 
 
-        $limit = 10;
+        $limit = 20;
         $page = intval($reqt->query->get('page')) ?:1;
-        $pagination = $orderRepo->getPagination($page, $limit=10, $options=['fkCeAccount'=>$account, 'isDebit'=>0],$class='CeAccountEntry');
+        $pagination = $orderRepo->getPagination($page, $limit, ['fkCeAccount'=>$account, 'isDebit'=>0],'CeAccountEntry');
         $offset = ($page - 1)  * $limit;
         $accountEntries = $acEntryRepo->findBy(['fkCeAccount'=>$account, 'isDebit'=>1], array('datec' => 'DESC'),$limit,$offset);
 
@@ -101,6 +101,7 @@ class AccountController extends AbstractController
             $this->addFlash('warning', 'No Debits');
             return $this->redirectToRoute('ceaccount_show',['id'=>$account->getId()]);
         }
+        
         return $this->render('account/accountdebits.html.twig', [
             'account'=>$account,
             'accountEntries'=>$accountEntries,

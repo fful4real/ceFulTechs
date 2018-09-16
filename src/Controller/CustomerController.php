@@ -33,13 +33,10 @@ class CustomerController extends AbstractController
     {
         $limit = 100;
         $page = intval($reqt->query->get('page')) ?:1;
-        $pagination = $orderRepo->getPagination($page,$limit);
-        $customerData = $repo->getCustomerData();
+        $pagination = $orderRepo->getPagination($page,$limit,[],'CeCustomer');
         $offset = ($page - 1)  * $limit;
-        $customers = $repo->findBy(array(), array('firstName' => 'DESC'),$limit,$offset);
-
+        $customerData = $repo->getCustomerData($offset,$limit);
         return $this->render('customer/list.html.twig', [
-            'customers'=>$customers,
             'pagination'=>$pagination,
             'page'=>$page,
             'customerData'=>$customerData,
@@ -92,7 +89,7 @@ class CustomerController extends AbstractController
            return $this->redirectToRoute('customer_list');
         }
 
-    	return $this->render('customer/show.html.twig', [
+        return $this->render('customer/show.html.twig', [
             'customer' => $customer,
         ]);
     }

@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Order-FulTechs{% endblock %}
-
+{% block title %}Debits Order-FulTechs{% endblock %}
+{% block stylesheets %}
+  <link href="{{asset('lib/select2/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/dataTables.fixedHeader.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet">
+{% endblock %}
 {% block body %}
     <div class="slim-mainpanel">
       <div class="container">
@@ -17,29 +21,39 @@
         </div><!-- slim-pageheader -->
         <div class="section-wrapper">
           {% include 'flash.html.twig' %}
-          <div class="row">
-            <div class="col-md-6 col-lg-12 mg-md-t-0-force">
-              <ul class="list-group list-group-striped">
-              	<label class="section-title">List des Sorties</label>
+          <label class="section-title">Account: {{account.ceAccountName}}
+              <span class="mg-l-30" title="View Account"><a href="{{path('ceaccount_show',{'id':account.id})}}"><i class="icon ion-gear-a tx-14"></i></a></span>
+              <a href="{{path('ceaccount_edit',{'id':account.id})}}" title="Edit Account"><i class="icon ion-edit tx-12 text-danger"></i></a>
+          </label>
+          <p>Below you will find all aoutgoing transactions for account: <span>{{account.ceAccountCode}}</span></p>
+          <div class="table-wrapper">
+            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display tale-fixed" style="width: 100%">
+              <thead>
+                <tr>
+                  <th class="wd-15p"><i class="icon ion-cash lh-20 tx-20 pd-r-10 text-success"></i>Amount</span></th>
+                  <th class="wd-15p"><i class="icon ion-android-calendar lh-20 tx-20 pd-r-10 text-primary"></i><span>Date</span></th>
+                  {%if account.isMobileMoney == false%}
+                    <th class="wd-15p"><i class="icon ion-person lh-20 tx-20 pd-r-10 text-primary"></i><span>Customer</span></th>
+                  {% endif%}
+                </tr>
+              </thead>
+              <tbody>
               {% for accountEntry in accountEntries %}
-              	{% if accountEntry.isDebit == 1%}
-                <li class="list-group-item">
-                  <p class="mg-b-0">
-                  <i class="fa fa-arrow-circle-up tx-danger mg-r-8"></i><strong class="tx-inverse tx-medium">{{accountEntry.ceAmount | number_format('0','.',',')}} FCFA</strong> 
-                  <span class="text-muted">Sortie le {{accountEntry.datec | date('d-M-Y')}}
-                  {% if accountEntry.ceFromAccount %} du Compte {{accountEntry.ceFromAccount.ceAccountCode}}
+                {% if accountEntry.isDebit == 1%}
+                <tr {% if accountEntry.fkCeCustomer%} class='clickable-row' data-href=" {{path('customer_show',{'id':accountEntry.fkCeCustomer.id})}} {%endif%}">
+                  <td><i class="fa fa-arrow-circle-up tx-danger mg-r-8"></i><strong class="tx-inverse tx-medium">{{accountEntry.ceAmount | number_format('0','.',',')}} FCFA</strong> </td>
+                  <td valign="middle"><span>{{accountEntry.datec | date('d-M-Y')}}</span></td>
+                  {% if accountEntry.fkCeCustomer %}
+                  <td><span><span class="">{{accountEntry.fkCeCustomer.mobNum}} {{accountEntry.fkCeCustomer.firstName}}</span> 
+                    </span>
+                  </td>
                   {% endif %}
-
-                  {% if accountEntry.fkCeCustomer %} du Client <strong class="tx-inverse tx-medium">{{accountEntry.fkCeCustomer.mobNum}} {{accountEntry.fkCeCustomer.firstName}}</strong> 
-                  {% endif %}
-                  </span>
-                  </p>
-                </li>
-                {% endif %}
-              {% endfor %}
-              </ul>
-            </div><!-- col-4 -->
-          </div><!-- row -->
+                </tr>
+                {%endif%}
+              {%endfor%}
+              </tbody>
+            </table>
+          </div>
           <div class="pagination-wrapper border-0">
             <nav aria-label="Page navigation">
               <ul class="pagination mg-b-0">
@@ -54,3 +68,32 @@
     </div><!-- slim-mainpanel -->
 
 {% endblock %}
+
+{% block javascripts %}
+  <script src="{{asset('lib/select2/js/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('lib/select2/js/dataTables.fixedHeader.min.js')}}"></script>
+{% endblock %}
+{% block customscript%}
+  <script>
+      $(function(){
+        'use strict';
+
+        $('#datatable1').DataTable({
+          fixedHeader: {
+              header: true,
+          },
+          responsive: true,
+          language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page'
+          },
+          pagingType: "simple",
+        });
+
+        // Select2
+        $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+
+      });
+    </script>
+{%endblock%}

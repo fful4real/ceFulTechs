@@ -67,13 +67,14 @@ class CeCustomerRepository extends ServiceEntityRepository
         return;
     }
 
-    public function getCustomerData()
+    public function getCustomerData($page,$limit)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT * FROM (SELECT id AS customerId, first_name AS firstName, last_name AS lastName, mob_num AS mobNum, fk_ce_town_id AS townId FROM ce_customer GROUP BY mobNum) AS CEC 
             LEFT JOIN (SELECT count(ce_mobnum) AS orderCount, fk_ce_town_id AS townId1, SUM(ce_amount) AS sumCustomer, ce_mobnum AS mobNum1 FROM ceorder GROUP BY ce_mobnum) AS CEO 
             ON CEC.mobNum = CEO.mobNum1
-LEFT JOIN (SELECT id as townId2, town_alias AS townAlias FROM ce_town) AS CET ON CEC.townId = CET.townId2 ";
+LEFT JOIN (SELECT id as townId2, town_alias AS townAlias FROM ce_town) AS CET ON CEC.townId = CET.townId2 
+    LIMIT ".$limit." OFFSET ".$page;
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -84,10 +85,7 @@ LEFT JOIN (SELECT id as townId2, town_alias AS townAlias FROM ce_town) AS CET ON
     public function getCustomerDataFixture()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT * FROM (SELECT fk_ce_town_id AS townId, ce_mobnum AS mobNum FROM ceorder) AS CEO 
-            LEFT JOIN (SELECT * FROM ce_customer) AS CEC 
-            ON CEO.mobNum = CEC.mob_num
-            GROUP BY CEO.mobNum";
+        $sql = "SELECT * FROM ce_customer";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 

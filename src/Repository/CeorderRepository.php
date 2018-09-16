@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CeAccount;
 use App\Entity\CeAccountEntry;
+use App\Entity\CeCustomer;
 use App\Entity\Ceorder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -117,6 +118,12 @@ class CeorderRepository extends ServiceEntityRepository
             case 'CeAccountEntry':
                 $repo = $this->getEntityManager()->getRepository(CeAccountEntry::class);
                 $pages = ceil(count($repo->findBy($options))/$limit);
+                break;
+
+            case 'CeCustomer':
+                $repo = $this->getEntityManager()->getRepository(CeCustomer::class);
+                $pages = ceil(count($repo->findBy($options))/$limit);
+                // var_dump($pages);
                 break;
             
             default:

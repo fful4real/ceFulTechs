@@ -2,8 +2,9 @@
 
 {% block title %}Customers - FulTechs{% endblock %}
 {% block stylesheets %}
-  <link href="{{asset('lib/datatables/css/jquery.dataTables.css')}}" rel="stylesheet">
-  <link href="{{asset('lib/select2/css/select2.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/dataTables.fixedHeader.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
     <div class="slim-mainpanel">
@@ -20,7 +21,7 @@
         <div class="section-wrapper">
           <label class="section-title">List Of Customers</label>
           <div class="table-wrapper">
-            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display">
+            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display" style="width: 100%">
               <thead>
                 <tr>
                   <th class="wd-15p">Names</th>
@@ -59,9 +60,8 @@
     </div><!-- slim-mainpanel -->
 {% endblock %}
 {% block javascripts %}
-  <script src="{{asset('lib/datatables/js/jquery.dataTables.js')}}"></script>
-  <script src="{{asset('lib/datatables-responsive/js/dataTables.responsive.js')}}"></script>
-  <script src="{{asset('lib/select2/js/select2.min.js')}}"></script>
+  <script src="{{asset('lib/select2/js/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('lib/select2/js/dataTables.fixedHeader.min.js')}}"></script>
 {% endblock %}
 {% block customscript%}
   <script>
@@ -69,13 +69,16 @@
         'use strict';
 
         $('#datatable1').DataTable({
+          fixedHeader: {
+              header: true,
+          },
           responsive: true,
           language: {
             searchPlaceholder: 'Search...',
             sSearch: '',
-            lengthMenu: '_MENU_ items/page',
+            lengthMenu: '_MENU_ items/page'
           },
-          pagingType: "simple"
+          pagingType: "simple",
         });
 
         // Select2
