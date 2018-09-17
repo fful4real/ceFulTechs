@@ -70,12 +70,12 @@ class CustomerController extends AbstractController
 
             $manager->persist($customer);
 
-            $manager->flush();
+            //$manager->flush();
 
         }
 
         return $this->render('customer/customerform.html.twig', [
-            'customerForm' => $customerForm->createView(), 'editMode'=>$customer->getId() !== null
+            'customerForm' => $customerForm->createView(), 'editMode'=>$customer->getId() ?: null
         ]);
     }
 
@@ -85,9 +85,6 @@ class CustomerController extends AbstractController
 
     public function customerShow(CeCustomer $customer = null)
     {
-        if (!$customer) {
-           return $this->redirectToRoute('customer_list');
-        }
 
         return $this->render('customer/show.html.twig', [
             'customer' => $customer,

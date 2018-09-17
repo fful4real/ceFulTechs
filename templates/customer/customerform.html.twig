@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Customer-FulTechs{% endblock %}
+{% block title %}New Customer - FulTechs{% endblock %}
 
 {% block body %}
     <div class="slim-mainpanel">
@@ -8,8 +8,9 @@
 
         <div class="slim-pageheader">
           <ol class="breadcrumb slim-breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            <li class="breadcrumb-item"><a href="{{path('home')}}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{path('customer_list')}}">Customers</a></li>
+            <li class="breadcrumb-item active" aria-current="page">New Customer</li>
           </ol>
           <h6 class="slim-pagetitle">{% if editMode %}Modifier{% else %}Nouveau{% endif %} Client</h6>
         </div><!-- slim-pageheader -->

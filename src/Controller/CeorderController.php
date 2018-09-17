@@ -223,19 +223,35 @@ class CeorderController extends AbstractController
      * @Route("/order/new", name="ceorder_new")
      * @Route("/order/{id}/edit", name="ceorder_edit")
      */
-    public function ceorderForm(Ceorder $ceorder = null, Request $reqt, ObjectManager $manager, CeChargeRepository $chargeRepo, CeNetworkRepository $networkRep)
+    public function ceorderForm(Ceorder $ceorder = null, Request $reqt, ObjectManager $manager, CeChargeRepository $chargeRepo, CeNetworkRepository $networkRep, CeCustomerRepository $customerRepo)
     {
     	//var_dump($reqt);
     	if (!$ceorder) {
     		$ceorder = new Ceorder();
     	}
+        $custNumber = intval($reqt->query->get('mobile')) ?:0;
+        $hasPost = $reqt->request->get('ceorder') ? true : false;
+        if (($customer1 = $customerRepo->findOneBy(['mobNum'=>$custNumber])) && $hasPost == false)  {
+            //var_dump($reqt->request);
+            $ceorder->setFkCeCustomer($customer1);
+            $orderArray = ['ceMobnum'=>$customer1->getMobNum(),
+                            'orderType'=>'1',
+                            'fkCeTown'=>$customer1->getFkCeTown()
+                        ];
+            $customerArray = ['firstName'=>$customer1->getFirstName(),
+                                'lastName'=>$customer1->getLastName()
+                            ];
+            $reqt = Request::create(
+                        '/order/new',
+                        'POST',
+                        array('ceorder' => $orderArray,'ceCustomer'=>$customerArray)
+                    );
+        }
+        // var_dump($reqt->request);
         $user = $this->getUser();
     	$customerRep = $this->getDoctrine()->getRepository(CeCustomer::class);
     	$orderForm = $this->createForm(CeorderType::class, $ceorder);
     	$orderForm->handleRequest($reqt);
-
-    	//var_dump(serialize(array([67,651,652,653,654])));
-    	//die();
 
     	$orderCustomer = $reqt->request->get('ceCustomer') ?: ['firstName'=>'','lastName'=>''] ;
     	

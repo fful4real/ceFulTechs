@@ -15,6 +15,7 @@
         </div><!-- slim-pageheader -->
 
         <div class="row row-sm">
+          {% include 'flash.html.twig' %}
           <div class="col-lg-8">
             <div class="card card-profile">
               <div class="card-body">
@@ -63,7 +64,7 @@
             </div><!-- card -->
             <ul class="nav nav-activity-profile mg-t-20">
               <li class="nav-item"><a href="" class="nav-link"><i class="icon ion-ios-redo tx-purple"></i> Share an update</a></li>
-              <li class="nav-item"><a href="" class="nav-link"><i class="icon ion-image tx-primary"></i> Publish photo</a></li>
+              <li class="nav-item"><a href="{{path('ceorder_new',{'mobile':customer.mobNum})}}" class="nav-link"><i class="icon ion-ios-cart-outline tx-primary"></i> Place Order</a></li>
             </ul><!-- nav -->
           </div><!-- col-4 -->
         </div><!-- row -->
