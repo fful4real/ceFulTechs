@@ -15,10 +15,11 @@
           <h6 class="slim-pagetitle">{% if editMode %}Modifier{% else %}Nouveau{% endif %} Client</h6>
         </div><!-- slim-pageheader -->
 
-          <div class="card"> 
+          <div class="card">
           {{ form_start(customerForm)}}
 
             	<div class="card-body pd-30">
+                {% include 'flash.html.twig' %}
                   <div class="form-group">
                   		<label class="form-control-label" for="order_mobnum" name="order_mobnum_lab" id="">Numero de tel</label>
     	              <div class="input-group">
@@ -39,14 +40,30 @@
                     {{ form_errors(customerForm.firstName)}}
                   </div><!-- form-group -->
                   <div class="form-group">
-                    <label class="form-control-label" name="order_nam_e" id="">Nom</label>
+                    <label class="form-control-label" name="order_name" id="">Nom</label>
                     {{ form_widget(customerForm.lastName) }}
                     {{ form_errors(customerForm.lastName)}}
+                  </div><!-- form-group -->
+                  <div class="form-group">
+                    <label class="form-control-label" name="order_otherNumber" id="">Other Number</label>
+                    {{ form_widget(customerForm.otherNumber) }}
+                    {{ form_errors(customerForm.otherNumber)}}
+                  </div><!-- form-group -->
+                  <div class="form-group">
+                    <label class="form-control-label" name="order_custNote" id="">Customer Note</label>
+                    {{ form_widget(customerForm.custNote) }}
+                    {{ form_errors(customerForm.custNote)}}
+                  </div><!-- form-group -->
+                  <div class="form-group">
+                    <label class="form-control-label" name="order_fkCeTown" id="">Nom</label>
+                    {{ form_widget(customerForm.fkCeTown) }}
+                    {{ form_errors(customerForm.fkCeTown)}}
                   </div><!-- form-group -->
     
                   <div class="mg-t-30">
                   	<input type="submit" name="" value="{% if editMode %}Modifier{% else %}Creer{% endif %}" class="btn btn-success">
-                    <input type="reset" name="" value="Reinitialiser" class="btn btn-warning">
+                    <input type="reset" name="" value="Reinitialiser" class="btn btn-warning large-screen">
+                    <a href="{% if editMode%}{{path('customer_show',{'id':customer.id})}}{%else%}{{path('customer_list')}}{%endif%}" class="btn btn-secondary">Annuller</a>
                   </div>
             	</div><!-- card-body -->
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\CeCustomer;
+use App\Form\CeCustomerUpdateType;
 use App\Form\CustomerType;
 use App\Repository\CeCustomerRepository;
 use App\Repository\CeTownRepository;
@@ -36,6 +37,7 @@ class CustomerController extends AbstractController
         $pagination = $orderRepo->getPagination($page,$limit,[],'CeCustomer');
         $offset = ($page - 1)  * $limit;
         $customerData = $repo->getCustomerData($offset,$limit);
+        // var_dump($customerData);
         return $this->render('customer/list.html.twig', [
             'pagination'=>$pagination,
             'page'=>$page,
@@ -48,34 +50,48 @@ class CustomerController extends AbstractController
      * @Route("/customer/{id}/edit", name="customer_edit")
      */
 
-    public function customerForm(CeCustomer $customer = null, Request $reqt, ObjectManager $manager)
+    public function customerForm(CeCustomer $customer = null, Request $reqt, ObjectManager $manager, CeCustomerRepository $customerRepo)
     {
         if (!$customer) {
             $customer = new CeCustomer();
         }
 
-        $customerForm = $this->createForm(CustomerType::class, $customer);
+        $customerForm = $this->createForm(CeCustomerUpdateType::class, $customer);
         $customerForm->handleRequest($reqt);
 
 
         if ($customerForm->isSubmitted() && $customerForm->isValid()) {
             $postData = $reqt->request;
+            $postCustomerData = $reqt->request->get('ce_customer_update');
 
             if (!$customer->getId()) {
                 $customer->setDatec(new \DateTime());
             }
-            $customer->setCustNote('Customers Note')
-                    ->setTms(new \DateTime())
-                    ->setOtherNumber(['05563301795', '05563301795']);
+            $postCustomer = $customerRepo->findBy(['mobNum'=>$postCustomerData['mobNum']]);
+            $oldCustomer = $customerRepo->find($customer->getId());
+            
+            if ($postCustomer && $postCustomer[0]->getId() != $customer->getId()) {
+                $msg = 'Numer '.$postCustomerData['mobNum'].' Already Exists';
+                $this->addFlash('warning', $msg);
+                return $this->render('customer/customerform.html.twig', [
+                                    'customerForm' => $customerForm->createView(), 
+                                    'editMode'=>$customer->getId() ?: null,
+                                    'customer'=>$customer,
+                                    ]);
+                
+            }
+            $customer->setTms(new \DateTime());
 
             $manager->persist($customer);
 
-            //$manager->flush();
+            $manager->flush();
+            return $this->redirectToRoute('customer_show',['id'=>$customer->getId()]);
 
         }
 
         return $this->render('customer/customerform.html.twig', [
-            'customerForm' => $customerForm->createView(), 'editMode'=>$customer->getId() ?: null
+            'customerForm' => $customerForm->createView(), 'editMode'=>$customer->getId() ?: null,
+            'customer'=>$customer,
         ]);
     }
 

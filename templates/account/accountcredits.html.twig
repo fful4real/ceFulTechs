@@ -3,8 +3,9 @@
 {% block title %}Credits - FulTechs{% endblock %}
 
 {% block stylesheets %}
-  <link href="{{asset('lib/datatables/css/jquery.dataTables.css')}}" rel="stylesheet">
-  <link href="{{asset('lib/select2/css/select2.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/dataTables.fixedHeader.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
     <div class="slim-mainpanel">
@@ -27,12 +28,20 @@
           <p>Below you will find all incomming transactions for account: <span>{{account.ceAccountCode}}</span></p>
 
           <div class="table-wrapper">
-            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display table-fixed">
+            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display">
               <thead>
                 <tr>
-                  <th class="wd-15p"><i class="icon ion-cash lh-20 tx-20 pd-r-10 text-primary"></i>Amount</span></th>
-                  <th class="wd-15p"><i class="icon ion-android-calendar lh-20 tx-20 pd-r-10 text-primary"></i><span>Date</span></th>
-                  <th class="wd-20p"><i class="icon ion-podium lh-20 tx-20 pd-r-10 text-primary"></i><span>Account</span></th>
+                  <th class="wd-15p text-center text-lg-left">
+                    <i class="icon ion-cash lh-20 tx-14 pd-r-10"></i>
+                    <span class="large-screen">Amount</span>
+                  </th>
+                  <th class="wd-15p text-center text-lg-left">
+                      <i class="icon ion-android-calendar lh-20 tx-14 pd-r-10"></i>
+                      <span class="large-screen">Date</span>
+                  </th>
+                  <th class="wd-20p text-center text-lg-left"><i class="icon ion-podium lh-20 tx-14 pd-r-10"></i>
+                    <span class="large-screen">Account</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -67,9 +76,8 @@
 {% endblock %}
 
 {% block javascripts %}
-  <script src="{{asset('lib/datatables/js/jquery.dataTables.js')}}"></script>
-  <script src="{{asset('lib/datatables-responsive/js/dataTables.responsive.js')}}"></script>
-  <script src="{{asset('lib/select2/js/select2.min.js')}}"></script>
+  <script src="{{asset('lib/select2/js/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('lib/select2/js/dataTables.fixedHeader.min.js')}}"></script>
 {% endblock %}
 {% block customscript%}
   <script>
@@ -77,6 +85,9 @@
         'use strict';
 
         $('#datatable1').DataTable({
+          fixedHeader: {
+              header: true,
+          },
           responsive: true,
           language: {
             searchPlaceholder: 'Search...',

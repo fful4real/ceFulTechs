@@ -2,8 +2,9 @@
 
 {% block title %}Orders - FulTechs{% endblock %}
 {% block stylesheets %}
-  <link href="{{asset('lib/datatables/css/jquery.dataTables.css')}}" rel="stylesheet">
-  <link href="{{asset('lib/select2/css/select2.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/dataTables.fixedHeader.min.css')}}" rel="stylesheet">
+  <link href="{{asset('lib/select2/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet">
 {% endblock %}
 {% block body %}
     <div class="slim-mainpanel">
@@ -23,9 +24,18 @@
             <table id="datatable1" class="table mg-b-0 tx-12 table-striped display">
               <thead>
                 <tr>
-                  <th class="wd-15p">Reference</th>
-                  <th class="wd-15p">Montant</th>
-                  <th class="wd-20p">Numero</th>
+                  <th class="wd-15p">
+                    <i class="icon icon ion-ios-paper-outline lh-20 tx-14 pd-r-10"></i>
+                    <span class="large-screen">Reference</span>
+                  </th>
+                  <th class="wd-15p">
+                    <i class="icon ion-cash lh-20 tx-14 pd-r-10"></i>
+                    <span class="large-screen">Montant</span>
+                  </th>
+                  <th class="wd-20p">
+                    <i class="icon ion-ios-telephone tx-14 pd-r-10"></i>
+                  <span class="large-screen">Numero</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -69,9 +79,8 @@
     </div><!-- slim-mainpanel -->
 {% endblock %}
 {% block javascripts %}
-  <script src="{{asset('lib/datatables/js/jquery.dataTables.js')}}"></script>
-  <script src="{{asset('lib/datatables-responsive/js/dataTables.responsive.js')}}"></script>
-  <script src="{{asset('lib/select2/js/select2.min.js')}}"></script>
+  <script src="{{asset('lib/select2/js/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('lib/select2/js/dataTables.fixedHeader.min.js')}}"></script>
 {% endblock %}
 {% block customscript%}
   <script>
@@ -79,6 +88,9 @@
         'use strict';
 
         $('#datatable1').DataTable({
+          fixedHeader: {
+              header: true,
+          },
           responsive: true,
           language: {
             searchPlaceholder: 'Search...',

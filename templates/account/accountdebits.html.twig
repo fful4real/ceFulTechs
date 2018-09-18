@@ -27,13 +27,13 @@
           </label>
           <p>Below you will find all aoutgoing transactions for account: <span>{{account.ceAccountCode}}</span></p>
           <div class="table-wrapper">
-            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display tale-fixed" style="width: 100%">
+            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display text-center text-lg-left" style="width: 100%">
               <thead>
                 <tr>
-                  <th class="wd-15p"><i class="icon ion-cash lh-20 tx-20 pd-r-10 text-success"></i>Amount</span></th>
-                  <th class="wd-15p"><i class="icon ion-android-calendar lh-20 tx-20 pd-r-10 text-primary"></i><span>Date</span></th>
+                  <th class="wd-15p"><i class="icon ion-cash lh-20 tx-14 pd-r-10"></i><span class="large-screen">Amount</span></th>
+                  <th class="wd-15p"><i class="icon ion-android-calendar lh-20 tx-14 pd-r-10"></i><span class="large-screen">Date</span></th>
                   {%if account.isMobileMoney == false%}
-                    <th class="wd-15p"><i class="icon ion-person lh-20 tx-20 pd-r-10 text-primary"></i><span>Customer</span></th>
+                    <th class="wd-15p"><i class="icon ion-person lh-20 tx-14 pd-r-10"></i><span class="large-screen">Customer</span></th>
                   {% endif%}
                 </tr>
               </thead>

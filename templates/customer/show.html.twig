@@ -24,15 +24,13 @@
                   <div class="media-body">
                     <h3 class="card-profile-name">{{customer.firstName}} {{customer.lastName}}</h3>
                     <p class="card-profile-position">Executive Director at <a href="">ThemePixels, Inc.</a></p>
-                    <div class="media">
-	                  <div><i class="icon ion-ios-telephone-outline tx-24 lh-5 tx-success"></i></div>
-	                  <div class="mg-t-4">
-	                    <span class="tx-16 tx-gray-700 mg-l-10 pd-b-5">{{customer.mobNum}}</span>
-	                    
-	                  </div><!-- media-body -->
-	                </div>
-                    <p><i class="icon ion-home tx-24 lh-5 tx-gray-700 mg-r-10"></i>{{customer.fkCeTown.townAlias}}</p>
 
+                    <p class="mg-b-5">
+                      <i class="icon ion-ios-telephone tx-16 lh-5 mg-r-10"></i>{{customer.mobNum}}
+                    </p>
+                    <p>
+                      <i class="icon ion-home tx-24 lh-5 tx-gray-700 mg-r-10"></i>{{customer.fkCeTown.townAlias}}
+                    </p>
                     <p class="mg-b-0">A consummate human capital management professional with international training and talent management implementations experience across the entire universe...<a href="">Read more</a></p>
                   </div><!-- media-body -->
                 </div><!-- media -->

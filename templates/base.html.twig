@@ -39,6 +39,7 @@
     <!-- Slim CSS -->
     {% block stylesheets %}{% endblock %}
     <link rel="stylesheet" href="{{asset('css/slim.css')}}">
+    <link rel="stylesheet" href="{{asset('css/custom.css')}}">
 
   </head>
   <body class="dashboard-3">
@@ -191,7 +192,8 @@
     <div class="slim-navbar">
       <div class="container">
         <ul class="nav">
-          <li class="nav-item with-sub active">
+          <li class="nav-item with-sub {% if 'CeorderController' in app.request.attributes.get('_controller') %}
+          active{% endif %}">
             <a class="nav-link" href="#">
               <i class="icon ion-ios-paper-outline"></i>
               <span>Mandats</span>
@@ -203,7 +205,8 @@
               </ul>
             </div><!-- sub-item -->
           </li>
-          <li class="nav-item with-sub">
+          <li class="nav-item with-sub  {% if 'AccountController' in app.request.attributes.get('_controller') %}
+          active{% endif %}">
             <a class="nav-link" href="#">
               <i class="icon ion-ios-filing-outline"></i>
               <span>Comptes</span>
@@ -215,7 +218,8 @@
               </ul>
             </div><!-- sub-item -->
           </li>
-          <li class="nav-item with-sub">
+          <li class="nav-item with-sub {% if 'CustomerController' in app.request.attributes.get('_controller') %}
+          active{% endif %}">
             <a class="nav-link" href="#">
               <i class="icon ion-ios-person-outline"></i>
               <span>Clients</span>
@@ -233,7 +237,6 @@
 	{% block body %}
     
   {% endblock %}
-
     <div class="slim-footer">
       <div class="container">
         <p>Copyright 2018 &copy; All Rights Reserved. FulTechs CashExpress</p>
@@ -242,9 +245,9 @@
     </div><!-- slim-footer -->
 
     <script src="{{asset('lib/jquery/js/jquery.js')}}"></script>
-    <script src="{{asset('lib/bootstrap/js/bootstrap.js')}}"></script>
     <script src="{{asset('lib/jquery.cookie/js/jquery.cookie.js')}}"></script>
     {% block javascripts %}{% endblock %}
+    <script src="{{asset('lib/bootstrap/js/bootstrap.js')}}"></script>
     <script src="{{asset('js/slim.js')}}"></script>
     {% block customscript %}{% endblock %}
   </body>

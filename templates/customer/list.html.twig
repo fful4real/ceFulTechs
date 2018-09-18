@@ -21,25 +21,39 @@
         <div class="section-wrapper">
           <label class="section-title">List Of Customers</label>
           <div class="table-wrapper">
-            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display" style="width: 100%">
+            <table id="datatable1" class="table mg-b-0 tx-12 table-striped display text-center " style="width: 100%">
               <thead>
                 <tr>
-                  <th class="wd-15p">Names</th>
-                  <th class="wd-20p">Mobile</th>
-                  <th class="wd-20p">Town</th>
-                  <th class="wd-20p">Orders</th>
-                  <th class="wd-20p">Total Amount</th>
+                  <th class="wd-15p"><i class="icon ion-person tx-14 pd-r-10"></i><span class="large-screen">Names</span></th>
+                  <th class="wd-20p">
+                    <i class="icon ion-ios-telephone tx-14 pd-r-10"></i><span class="large-screen">Mobile</span>
+                  </th>
+                  <th class="wd-20p large-screen">
+                    <i class="icon ion-location tx-14 pd-r-10"></i><span>Town</span>
+                  </th>
+                  <th class="wd-20p"><i class="icon icon ion-ios-cart tx-12 pd-r-10"></i><span class="large-screen">Orders</span></th>
+                  <th class="wd-20p large-screen">
+                    <i class="icon icon ion-cash tx-12 pd-r-10"></i>Total Amount
+                  
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 
                 {% for key, customer in customerData %}
-	                <tr class='clickable-row' data-href="{{path('customer_show',{'id':customer.customerId})}}" title="{{customer.firstName}}">
-	                  <td><i class="icon ion-person tx-20 pd-r-10 text-primary"></i>{{customer.firstName}} {{customer.lastName}}</td>
+	                <tr class='clickable-row' data-href="{{path('customer_show',{'id':customer.customerId})}}">
+	                  <td class="position-relative customer-list text-lg-left">
+                      <i class="icon ion-person tx-20 pd-r-10 text-primary large-screen"></i><span class="customer-name text-capitalize">{{customer.firstName}} <span class="text-uppercase">{{customer.lastName}}</span></span>
+                      <div class="customer-list-option">
+                        <a href="{{path('customer_edit',{'id':customer.customerId})}}" title="Modify Customer" data-toggle="tooltip" data-placement="top" title="" data-original-title="Create Order"><i class="icon ion-edit tx-12"></i></a>
+                          <a href="{{path('ceorder_new',{'mobile':customer.mobNum})}}" title="Create Order" data-toggle="tooltip" data-placement="top" title="" data-original-title="Create Order"><i class="icon icon ion-ios-cart tx-12"></i></a>
+                          <a href="{{path('customer_show',{'id':customer.customerId})}}" title="View Customer" data-toggle="tooltip" data-placement="top" title="" data-original-title="Create Order"><i class="icon ion-eye tx-12"></i></a>
+                      </div>
+                    </td>
 	                  <td>{{customer.mobNum}}</td>
-	                  <td>{{customer.townAlias}}</td>
+	                  <td class="large-screen">{{customer.townAlias}}</td>
 	                  <td>{{customer.orderCount}}</td>
-	                  <td>{{customer.sumCustomer}}</td>
+	                  <td class="large-screen">{{customer.sumCustomer}}</td>
 	                </tr>
                 {% endfor %}
               </tbody>
@@ -62,12 +76,24 @@
 {% block javascripts %}
   <script src="{{asset('lib/select2/js/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('lib/select2/js/dataTables.fixedHeader.min.js')}}"></script>
+  <script src="{{asset('lib/popper.js/js/popper.js')}}"></script>
 {% endblock %}
 {% block customscript%}
+
   <script>
       $(function(){
         'use strict';
+        /*Start Tooltip*/
+        // Initialize tooltip
+        $('[data-toggle="tooltip"]').tooltip();
 
+        // colored tooltip
+        $('[data-toggle="tooltip-info"]').tooltip({
+          template: '<div class="tooltip tooltip-info" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+        });
+        /*End Tooltip*/
+
+        /*Start Datatable*/
         $('#datatable1').DataTable({
           fixedHeader: {
               header: true,
